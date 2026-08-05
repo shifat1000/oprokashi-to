@@ -32,7 +32,7 @@ Admin Panel
 
 
 
-<form>
+<form id="storyForm">
 
 
 
@@ -41,10 +41,10 @@ Admin Panel
 </label>
 
 <input 
-type="text" 
+type="text"
 id="title"
-placeholder="গল্পের শিরোনাম">
-
+placeholder="গল্পের শিরোনাম"
+required>
 
 
 
@@ -56,8 +56,8 @@ placeholder="গল্পের শিরোনাম">
 <input 
 type="text"
 id="author"
-placeholder="লেখকের নাম">
-
+placeholder="লেখকের নাম"
+required>
 
 
 
@@ -66,23 +66,35 @@ placeholder="লেখকের নাম">
 ক্যাটাগরি
 </label>
 
-
 <select id="category">
 
-<option>অনুভূতি</option>
 
-<option>রহস্য</option>
+<option value="অনুভূতি">
+অনুভূতি
+</option>
 
-<option>জীবন</option>
 
-<option>প্রেম</option>
+<option value="রহস্য">
+রহস্য
+</option>
 
-<option>কল্পকাহিনী</option>
+
+<option value="জীবন">
+জীবন
+</option>
+
+
+<option value="প্রেম">
+প্রেম
+</option>
+
+
+<option value="কল্পকাহিনী">
+কল্পকাহিনী
+</option>
 
 
 </select>
-
-
 
 
 
@@ -91,18 +103,15 @@ placeholder="লেখকের নাম">
 গল্পের ছবি
 </label>
 
-
 <input 
 type="file"
 id="coverImage"
 accept="image/*">
 
 
-
 <img 
 id="preview"
-src=""
-alt="Preview">
+alt="Image Preview">
 
 
 
@@ -112,17 +121,17 @@ alt="Preview">
 গল্প লিখুন
 </label>
 
-
-<textarea 
+<textarea
 id="story"
-placeholder="এখানে গল্প লিখুন...">
+placeholder="এখানে সম্পূর্ণ গল্প লিখুন..."
+required>
 </textarea>
 
 
 
 
 
-<button type="button">
+<button type="submit">
 
 গল্প প্রকাশ করুন
 
@@ -133,6 +142,11 @@ placeholder="এখানে গল্প লিখুন...">
 </form>
 
 
+
+<p id="message"></p>
+
+
+
 </div>
 
 
@@ -142,42 +156,15 @@ placeholder="এখানে গল্প লিখুন...">
 
 
 
-<script>
+<!-- Supabase -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-const imageInput =
-document.getElementById("coverImage");
+<script src="supabase.js"></script>
 
 
-const preview =
-document.getElementById("preview");
-
-
-
-imageInput.addEventListener(
-"change",
-function(){
-
-
-const file=this.files[0];
-
-
-if(file){
-
-preview.src=
-URL.createObjectURL(file);
-
-
-preview.style.display="block";
-
-
-}
-
-
-});
-
-
-</script>
+<script src="admin.js"></script>
 
 
 
