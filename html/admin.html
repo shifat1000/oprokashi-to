@@ -1,100 +1,295 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>এডমিন প্যানেল — অপ্রকাশিত</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Full Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+    }
+
+    body {
+      font-family: 'Hind Siliguri', sans-serif;
+      background: var(--bg);
+      padding: 30px 20px;
+      color: #0f172a;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; }
     
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="css/style.css">
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .admin-card {
+      background: var(--card);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+    }
+
+    .form-group { margin-bottom: 18px; }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    textarea { height: 140px; resize: vertical; }
+
+    .btn-group { display: flex; gap: 10px; }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      color: white;
+    }
+
+    .btn-primary { background: var(--primary); }
+    .btn-success { background: #10b981; }
+    .btn-cancel { background: #64748b; display: none; }
+    .btn-edit { background: var(--warning); color: black; padding: 6px 12px; font-size: 14px; }
+    .btn-delete { background: var(--danger); padding: 6px 12px; font-size: 14px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; }
+    th { background: #f8fafc; }
+
+    .visit-site {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 600;
+      border: 1px solid var(--primary);
+      padding: 8px 16px;
+      border-radius: 6px;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <a href="index.html" class="logo">অপ্রকাশিত<span>.</span> <small style="font-size: 0.9rem; color: var(--text-muted); font-weight: normal;">(Admin Panel)</small></a>
-            <ul class="nav-links">
-                <li><a href="index.html">লাইভ সাইট</a></li>
-            </ul>
-        </div>
-    </nav>
+<div class="container">
+  <div class="header">
+    <h1>অ্যাডমিন কন্ট্রোল প্যানেল</h1>
+    <a href="index.html" class="visit-site" target="_blank">লাইভ সাইট দেখুন ↗</a>
+  </div>
 
-    <!-- Admin Main Container -->
-    <main class="container" style="margin-top: 2rem;">
-        
-        <!-- Story Create / Edit Form Card -->
-        <div class="admin-card">
-            <h2 id="formTitle" style="margin-bottom: 1.5rem;">নতুন গল্প প্রকাশ করুন</h2>
-            
-            <form id="storyForm">
-                <input type="hidden" id="storyId">
+  <!-- ১. গল্প যোগ/এডিট ফর্ম -->
+  <div class="admin-card">
+    <h2 id="formTitle">নতুন গল্প পোস্ট করুন</h2>
+    <form id="storyForm">
+      <input type="hidden" id="storyId">
 
-                <div class="form-group">
-                    <label for="storyTitle">গল্পের শিরোনাম</label>
-                    <input type="text" id="storyTitle" class="form-control" placeholder="গল্পের আকর্ষণীয় নাম লিখুন" required>
-                </div>
+      <div class="form-group">
+        <label for="title">গল্পের শিরোনাম:</label>
+        <input type="text" id="title" required placeholder="শিরোনাম দিন...">
+      </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <div class="form-group">
-                        <label for="storyAuthor">লেখকের নাম</label>
-                        <input type="text" id="storyAuthor" class="form-control" placeholder="যেমন: শাফায়াত জামান" required>
-                    </div>
+      <div class="form-group">
+        <label for="content">গল্পের বিবরণ:</label>
+        <textarea id="content" required placeholder="গল্প লিখুন... ডায়লগ প্রকাশের জন্য কোটেশন (&quot; &quot; বা “ ”) ব্যবহার করুন।"></textarea>
+      </div>
 
-                    <div class="form-group">
-                        <label for="storyCategory">ক্যাটাগরি</label>
-                        <select id="storyCategory" class="form-control" required>
-                            <option value="রোমান্টিক">রোমান্টিক</option>
-                            <option value="থ্রিলার">থ্রিলার</option>
-                            <option value="হরর">হরর</option>
-                            <option value="জীবনমুখী">জীবনমুখী</option>
-                            <option value="অন্যান্য" selected>অন্যান্য</option>
-                        </select>
-                    </div>
-                </div>
+      <div class="btn-group">
+        <button type="submit" class="btn-primary" id="submitBtn">পাবলিশ করুন</button>
+        <button type="button" class="btn-cancel" id="cancelBtn" onclick="resetForm()">বাতিল করুন</button>
+      </div>
+    </form>
+  </div>
 
-                <div class="form-group">
-                    <label for="storyCover">কভার ইমেজ আপলোড (Supabase Storage)</label>
-                    <input type="file" id="storyCover" class="form-control" accept="image/*">
-                    <small style="color: var(--text-muted); display: block; margin-top: 0.25rem;">নতুন ইমেজ সিলেক্ট না করলে আগেরটিই থাকবে।</small>
-                </div>
+  <!-- ২. গল্পের তালিকা ম্যানেজমেন্ট -->
+  <div class="admin-card">
+    <h2>প্রকাশিত গল্পসমূহ (ম্যানেজ করুন)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>শিরোনাম</th>
+          <th>সারাংশ</th>
+          <th>অ্যাকশন</th>
+        </tr>
+      </thead>
+      <tbody id="adminTableBody"></tbody>
+    </table>
+  </div>
 
-                <div class="form-group">
-                    <label for="storyContent">গল্পের মূল লেখা</label>
-                    <textarea id="storyContent" class="form-control" rows="10" placeholder="এখানে গল্প লিখুন..." required></textarea>
-                </div>
+  <!-- ৩. ওয়েবসাইট সেটিং (অ্যাপ ইনফো ও যোগাযোগ পরিবর্তন) -->
+  <div class="admin-card">
+    <h2>সাইটের তথ্য পরিবর্তন (Settings)</h2>
+    <form id="settingsForm">
+      <div class="form-group">
+        <label for="appInfoInput">অ্যাপ সম্পর্কে বিবরণ:</label>
+        <textarea id="appInfoInput" required></textarea>
+      </div>
 
-                <div style="display: flex; gap: 1rem;">
-                    <button type="submit" id="submitBtn" class="btn btn-primary">গল্প পাবলিশ করুন</button>
-                    <button type="button" id="cancelEditBtn" class="btn" style="display: none; background: #475569; color: white;">সম্পাদনা বাতিল</button>
-                </div>
-            </form>
-        </div>
+      <div class="form-group">
+        <label for="contactInfoInput">যোগাযোগের বিবরণ:</label>
 
-        <!-- Managed Published Stories List Card -->
-        <div class="admin-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                <h2>প্রকাশিত গল্পসমূহ</h2>
-                <input type="text" id="adminSearchInput" class="form-control" placeholder="গল্প খুঁজুন..." style="max-width: 300px;">
-            </div>
+        <textarea id="contactInfoInput" required></textarea>
+      </div>
 
-            <div id="adminStoriesList" style="display: flex; flex-direction: column; gap: 1rem;">
-                <p style="color: var(--text-muted); text-align: center;">তালিকা লোড করা হচ্ছে...</p>
-            </div>
-        </div>
+      <div class="form-group">
+        <label for="fbUrlInput">ফেসবুক পেজ লিঙ্ক (URL):</label>
+        <input type="text" id="fbUrlInput" required placeholder="https://facebook.com/yourpage">
+      </div>
 
-    </main>
+      <button type="submit" class="btn-success">সেটিংস সেভ করুন</button>
+    </form>
+  </div>
 
-    <!-- Supabase CDN Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</div>
 
-    <!-- Admin Panel Script Logic -->
-    <script type="module" src="js/admin.js"></script>
+<script>
+  let stories = JSON.parse(localStorage.getItem('app_stories')) || [];
+
+  const storyForm = document.getElementById('storyForm');
+  const storyIdInput = document.getElementById('storyId');
+  const titleInput = document.getElementById('title');
+  const contentInput = document.getElementById('content');
+  const submitBtn = document.getElementById('submitBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const formTitle = document.getElementById('formTitle');
+  const adminTableBody = document.getElementById('adminTableBody');
+
+  const settingsForm = document.getElementById('settingsForm');
+  const appInfoInput = document.getElementById('appInfoInput');
+  const contactInfoInput = document.getElementById('contactInfoInput');
+  const fbUrlInput = document.getElementById('fbUrlInput');
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderAdminTable();
+    loadSettingsIntoForm();
+  });
+
+  // গল্প সাবমিট করা
+  storyForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = titleInput.value.trim();
+    const content = contentInput.value.trim();
+    const id = storyIdInput.value;
+
+    if (!title || !content) return;
+
+    if (id) {
+      stories = stories.map(s => s.id === id ? { ...s, title, content } : s);
+    } else {
+      stories.unshift({ id: Date.now().toString(), title, content });
+    }
+
+    localStorage.setItem('app_stories', JSON.stringify(stories));
+    renderAdminTable();
+    resetForm();
+  });
+
+  function renderAdminTable() {
+    adminTableBody.innerHTML = '';
+    if (stories.length === 0) {
+      adminTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">কোনো গল্প পাওয়া যায়নি।</td></tr>`;
+      return;
+    }
+
+    stories.forEach(story => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${escapeHtml(story.title)}</strong></td>
+        <td>${escapeHtml(story.content.substring(0, 40))}...</td>
+        <td>
+          <button class="btn-edit" onclick="editStory('${story.id}')">এডিট</button>
+          <button class="btn-delete" onclick="deleteStory('${story.id}')">ডিলিট</button>
+        </td>
+      `;
+      adminTableBody.appendChild(tr);
+    });
+  }
+
+  function editStory(id) {
+    const story = stories.find(s => s.id === id);
+    if (!story) return;
+
+    storyIdInput.value = story.id;
+    titleInput.value = story.title;
+    contentInput.value = story.content;
+
+    formTitle.textContent = 'গল্প সংশোধন/এডিট করুন';
+    submitBtn.textContent = 'আপডেট করুন';
+    cancelBtn.style.display = 'inline-block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function deleteStory(id) {
+    if (confirm('আপনি কি এই গল্পটি মুছে ফেলতে চান?')) {
+      stories = stories.filter(s => s.id !== id);
+      localStorage.setItem('app_stories', JSON.stringify(stories));
+      renderAdminTable();
+      if (storyIdInput.value === id) resetForm();
+    }
+  }
+
+  function resetForm() {
+    storyIdInput.value = '';
+    titleInput.value = '';
+    contentInput.value = '';
+    formTitle.textContent = 'নতুন গল্প পোস্ট করুন';
+    submitBtn.textContent = 'পাবলিশ করুন';
+    cancelBtn.style.display = 'none';
+  }
+
+  // সাইট সেটিং সেভ করা
+  settingsForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const settings = {
+      appInfo: appInfoInput.value.trim(),
+      contactInfo: contactInfoInput.value.trim(),
+      fbUrl: fbUrlInput.value.trim()
+    };
+    localStorage.setItem('site_settings', JSON.stringify(settings));
+    alert('সাইটের সেটিং সফলভাবে সেভ হয়েছে!');
+  });
+
+  function loadSettingsIntoForm() {
+    const settings = JSON.parse(localStorage.getItem("site_settings")) || {
+      appInfo: "আমাদের এই প্ল্যাটফর্মে সুন্দর সুন্দর মৌলিক গল্প ও অনুগল্প প্রকাশিত হয়। এখানে পাঠক খুব সহজে কোনো বিজ্ঞাপন ছাড়াই গল্প পড়তে পারবেন।",
+      contactInfo: "আপনার লেখা গল্প আমাদের প্ল্যাটফর্মে প্রকাশ করতে চান? আপনার গল্পটি আমাদের ফেসবুক পেজে মেসেজ করে পাঠাতে পারেন।",
+      fbUrl: "https://facebook.com"
+    };
+
+    appInfoInput.value = settings.appInfo;
+    contactInfoInput.value = settings.contactInfo;
+    fbUrlInput.value = settings.fbUrl;
+  }
+
+  function escapeHtml(text) {
+    return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+</script>
 
 </body>
 </html>
