@@ -1,341 +1,324 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>অপ্রকাশিত — গল্পের এক অন্য ভুবন</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-dark: #0f172a;
-      --card-bg: #1e293b;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
-      --accent: #22c55e;
-      --border: #334155;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অপ্রকাশিত — গল্পের এক অন্য দুনিয়া</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #f0f6fc;
+            --text-muted: #8b949e;
+            --accent-color: #58a6ff;
+            --border-color: #30363d;
+            --primary-button: #238636;
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-      font-family: 'Hind Siliguri', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      line-height: 1.8;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
 
-    header {
-      background: rgba(30, 41, 59, 0.8);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-    .nav-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 18px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        /* Navbar */
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-    .logo {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--primary);
-      text-decoration: none;
-    }
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .logo span { color: var(--text-main); }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+        }
 
-    nav ul { display: flex; list-style: none; gap: 20px; }
-    nav a { text-decoration: none; color: var(--text-muted); font-weight: 500; transition: 0.3s; }
-    nav a:hover, nav a.active { color: var(--text-main); }
+        .logo span { color: var(--accent-color); }
 
-    .hero-section {
-      max-width: 1100px;
-      margin: 40px auto 20px;
-      padding: 0 20px;
-      text-align: center;
-    }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
 
-    .hero-section h1 { font-size: 36px; margin-bottom: 10px; }
-    .hero-section p { color: var(--text-muted); font-size: 18px; margin-bottom: 25px; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
 
-    .controls-container {
-      max-width: 700px;
-      margin: 0 auto 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+        .nav-links a.active, .nav-links a:hover {
+            color: var(--text-main);
+        }
 
-    .search-box {
-      width: 100%;
-      padding: 14px 20px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--card-bg);
-      color: var(--text-main);
-      font-size: 16px;
-      font-family: inherit;
-      outline: none;
-    }
+        /* Hero Section */
+        .hero-section {
+            padding: 50px 0 30px;
+            text-align: center;
+        }
 
-    .search-box:focus { border-color: var(--primary); }
+        .hero-title {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
 
-    .category-chips {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+        .hero-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
 
-    .chip {
-      padding: 6px 16px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 14px;
-      transition: 0.3s;
-    }
+        /* Search Box */
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto 20px;
+        }
 
-    .chip.active, .chip:hover {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+        }
 
-    .main-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: 2.8fr 1.2fr;
-      gap: 30px;
-      flex: 1;
-    }
+        .search-box input:focus {
+            border-color: var(--accent-color);
+        }
 
-    @media (max-width: 768px) {
-      .main-container { grid-template-columns: 1fr; }
-    }
+        /* Category Filter */
+        .categories-filter {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
 
-    .story-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px;
-      margin-bottom: 25px;
-    }
+        .cat-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
 
-    .story-title {
-      font-size: 24px;
-      color: var(--primary);
-      margin-bottom: 15px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 10px;
-    }
+        .cat-btn.active, .cat-btn:hover {
+            background: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
 
-    .story-body p { font-size: 18px; margin-bottom: 16px; }
+        /* Stories Grid */
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
 
-    /* অটোমেটিক ডায়লগ বক্স স্টাইল */
-    .dialogue-box {
-      background: rgba(34, 197, 94, 0.1);
-      border-left: 4px solid var(--accent);
-      padding: 14px 18px;
-      border-radius: 0 8px 8px 0;
-      margin: 18px 0;
-      font-style: italic;
-      color: #e2e8f0;
-    }
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
 
-    .narration { padding: 2px 4px; }
+        .story-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-    .sidebar-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      padding: 22px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
+        .story-title {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
 
-    .sidebar-title { font-size: 20px; margin-bottom: 12px; }
+        .story-excerpt {
+            color: var(--text-main);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            white-space: pre-line;
+        }
 
-    .social-btn {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      background: #1877f2;
-      color: white;
-      text-align: center;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      margin-top: 15px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      border-top: 1px solid var(--border);
-      color: var(--text-muted);
-      margin-top: 50px;
-    }
-  </style>
+        .story-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <div class="nav-container">
-      <a href="index.html" class="logo">অপ্রকাশিত<span>.</span></a>
-      <nav>
-        <ul>
-          <li><a href="index.html" class="active">হোম</a></li>
-          <li><a href="admin.html">এডমিন</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">অপ্রকাশিত<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">হোম</a></li>
+                <li><a href="admin.html">এডমিন</a></li>
+            </ul>
+        </div>
+    </nav>
 
-  <div class="hero-section">
-    <h1>অপ্রকাশিত অনুভূতির গল্পমালা</h1>
-    <p>শব্দে সাজানো হাজারো অপ্রকাশিত অনুভূতি এবং রোমাঞ্চকর গল্পের সমাহার</p>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">অপ্রকাশিত অনুভূতির গল্পমালা</h1>
+            <p class="hero-subtitle">শব্দে সাজানো হাজারো অপ্রকাশিত অনুভূতি এবং রোমাঞ্চকর গল্পের সমাহার</p>
+            
+            <!-- Dynamic Search Box -->
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="গল্পের নাম বা ক্যাটাগরি দিয়ে খুঁজুন...">
+            </div>
 
-    <div class="controls-container">
-      <input type="text" id="searchInput" class="search-box" placeholder="গল্পের নাম বা বিষয় দিয়ে খুঁজুন...">
-      <div class="category-chips">
-        <button class="chip active" onclick="filterCategory('all')">সব গল্প</button>
-        <button class="chip" onclick="filterCategory('রোমান্টিক')">রোমান্টিক</button>
-        <button class="chip" onclick="filterCategory('থ্রিলার')">থ্রিলার</button>
-        <button class="chip" onclick="filterCategory('হরর')">হরর</button>
-        <button class="chip" onclick="filterCategory('জীবনমুখী')">জীবনমুখী</button>
-      </div>
-    </div>
-  </div>
+            <!-- Category Filter Pills -->
+            <div class="categories-filter" id="categoryContainer">
+                <button class="cat-btn active" data-category="সব">সব গল্প</button>
+                <button class="cat-btn" data-category="রোমান্টিক">রোমান্টিক</button>
+                <button class="cat-btn" data-category="থ্রিলার">থ্রিলার</button>
+                <button class="cat-btn" data-category="হরর">হরর</button>
+                <button class="cat-btn" data-category="জীবনমুখী">জীবনমুখী</button>
+                <button class="cat-btn" data-category="অন্যান্য">অন্যান্য</button>
+            </div>
+        </div>
+    </section>
 
-  <div class="main-container">
-    <main id="stories">
-      <div id="storyContainer">
-        <!-- গল্প লোড হবে -->
-      </div>
+    <!-- Main Content Area -->
+    <main class="container">
+        
+        <!-- All Stories Grid Section -->
+        <section>
+            <h2 class="section-title" id="storiesTitle">সর্বশেষ গল্পসমূহ</h2>
+            <div class="stories-grid" id="storiesGrid">
+                <!-- Javascript দিয়ে গল্প এখানে আসবে -->
+            </div>
+        </section>
+
     </main>
 
-    <aside>
-      <div class="sidebar-card">
-        <h3 class="sidebar-title">📱 অ্যাপ সম্পর্কে</h3>
-        <p id="appInfoText">আমাদের এই প্ল্যাটফর্মে কোনো বিজ্ঞাপন ছাড়াই আরামদায়ক পরিবেশে রোমাঞ্চকর ও আবেগঘন সব গল্প পড়া যায়।</p>
-      </div>
+    <!-- Footer -->
+    <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 4rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+        <div class="container">
+            <p>&copy; 2026 অপ্রকাশিত। সর্বস্বত্ব সংরক্ষিত।</p>
+        </div>
+    </footer>
 
-      <div class="sidebar-card">
-        <h3 class="sidebar-title">✉️ যোগাযোগ করুন</h3>
-        <p id="contactText">আপনার লেখা গল্প আমাদের প্ল্যাটফর্মে পোস্ট করতে চাইলে আমাদের ফেসবুক পেজে পাঠাতে পারেন।</p>
-        <a id="fbLinkBtn" href="https://facebook.com" target="_blank" class="social-btn">অফিসিয়াল ফেসবুক পেজ</a>
-      </div>
-    </aside>
-  </div>
+    <!-- App Logic Script -->
+    <script>
+        let currentCategory = 'সব';
 
-  <footer>
-    <p>&copy; 2026 অপ্রকাশিত। সর্বস্বত্ব সংরক্ষিত।</p>
-  </footer>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStories();
 
-  <script>
-    let activeCategory = 'all';
+            // Search Filter
+            document.getElementById('searchInput').addEventListener('input', filterStories);
 
-    document.addEventListener("DOMContentLoaded", () => {
-      renderStories();
-      loadSiteSettings();
-
-      document.getElementById('searchInput').addEventListener('input', renderStories);
-    });
-
-    function filterCategory(cat) {
-      activeCategory = cat;
-      document.querySelectorAll('.chip').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent.trim() === cat || (cat === 'all' && btn.textContent.includes('সব')));
-      });
-      renderStories();
-    }
-
-    function renderStories() {
-      const container = document.getElementById("storyContainer");
-      const stories = JSON.parse(localStorage.getItem("app_stories")) || [];
-      const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-
-      let filteredStories = stories.filter(story => {
-        const matchesCategory = (activeCategory === 'all') || (story.category === activeCategory);
-        const matchesSearch = story.title.toLowerCase().includes(searchQuery) || story.content.toLowerCase().includes(searchQuery);
-        return matchesCategory && matchesSearch;
-      });
-
-      if (filteredStories.length === 0) {
-        container.innerHTML = `<div class="story-card"><p style="color:var(--text-muted); text-align:center;">কোনো গল্প পাওয়া যায়নি।</p></div>`;
-        return;
-      }
-
-      container.innerHTML = "";
-
-      filteredStories.forEach(story => {
-        const card = document.createElement("article");
-        card.className = "story-card";
-
-        const title = document.createElement("h2");
-        title.className = "story-title";
-        title.textContent = story.title;
-        card.appendChild(title);
-
-        const body = document.createElement("div");
-        body.className = "story-body";
-
-        const paragraphs = story.content.split(/\n+/);
-
-        paragraphs.forEach(paragraphText => {
-          const text = paragraphText.trim();
-          if (!text) return;
-
-          const p = document.createElement("p");
-          p.textContent = text;
-
-          // অটো ডায়লগ বক্স লজিক
-          const hasQuotes = /^["“].*["”]$/.test(text) || text.includes('"') || text.includes('“');
-
-          if (hasQuotes) {
-            p.classList.add("dialogue-box");
-          } else {
-            p.classList.add("narration");
-          }
-
-          body.appendChild(p);
+            // Category Filter
+            document.querySelectorAll('.cat-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentCategory = e.target.getAttribute('data-category');
+                    filterStories();
+                });
+            });
         });
 
-        card.appendChild(body);
-        container.appendChild(card);
-      });
-    }
+        function loadStories() {
+            const stories = JSON.parse(localStorage.getItem('app_stories')) || [];
+            renderStories(stories);
+        }
 
-    function loadSiteSettings() {
-      const settings = JSON.parse(localStorage.getItem("site_settings")) || {
-        appInfo: "আমাদের এই প্ল্যাটফর্মে কোনো বিজ্ঞাপন ছাড়াই আরামদায়ক পরিবেশে রোমাঞ্চকর ও আবেগঘন সব গল্প পড়া যায়।",
-        contactInfo: "আপনার লেখা গল্প আমাদের প্ল্যাটফর্মে পোস্ট করতে চাইলে আমাদের ফেসবুক পেজে পাঠাতে পারেন।",
-        fbUrl: "https://facebook.com"
-      };
+        function filterStories() {
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const stories = JSON.parse(localStorage.getItem('app_stories')) || [];
 
-      document.getElementById("appInfoText").textContent = settings.appInfo;
-      document.getElementById("contactText").textContent = settings.contactInfo;
-      document.getElementById("fbLinkBtn").href = settings.fbUrl;
-    }
-  </script>
+            const filtered = stories.filter(story => {
+                const matchesCat = (currentCategory === 'সব') || (story.category === currentCategory);
+                const matchesSearch = story.title.toLowerCase().includes(searchQuery) || story.content.toLowerCase().includes(searchQuery);
+                return matchesCat && matchesSearch;
+            });
+
+            renderStories(filtered);
+        }
+
+        function renderStories(storiesList) {
+            const grid = document.getElementById('storiesGrid');
+            grid.innerHTML = '';
+
+            if (storiesList.length === 0) {
+                grid.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center;">কোনো গল্প পাওয়া যায়নি। অ্যাডমিন প্যানেল থেকে গল্প যোগ করুন।</p>`;
+                return;
+            }
+
+            storiesList.forEach(story => {
+                const card = document.createElement('div');
+                card.className = 'story-card';
+                card.innerHTML = `
+                    <div>
+                        <h3 class="story-title">${escapeHtml(story.title)}</h3>
+                        <div class="story-excerpt">${escapeHtml(story.content)}</div>
+                    </div>
+                    <div class="story-meta">
+                        <span>ক্যাটাগরি: <strong>${story.category || 'সাধারণ'}</strong></span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function escapeHtml(text) {
+            return text ? text.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+        }
+    </script>
 
 </body>
 </html>
