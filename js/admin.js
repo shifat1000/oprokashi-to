@@ -1,7 +1,3 @@
-/* ==========================================================================
-   অপ্রকাশিত V2 — Admin Panel Controller (Direct Access - No Login)
-   ========================================================================== */
-
 import { 
   fetchStories, 
   createStory, 
@@ -10,7 +6,6 @@ import {
   uploadCoverImage 
 } from './supabase.js';
 
-// DOM Elements
 const storyForm = document.getElementById('storyForm');
 const storyIdInput = document.getElementById('storyId');
 const storyTitleInput = document.getElementById('storyTitle');
@@ -26,29 +21,22 @@ const formTitle = document.getElementById('formTitle');
 const adminStoriesList = document.getElementById('adminStoriesList');
 const adminSearchInput = document.getElementById('adminSearchInput');
 
-// Global State
 let storiesCache = [];
 let isEditing = false;
 let currentExistingImageUrl = '';
 
-/* ==========================================================================
-   1. Initial Load (No Auth Check Required)
-   ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
   loadAdminStories();
   setupEventListeners();
 });
 
-/* ==========================================================================
-   2. Fetch and Render Admin Stories List
-   ========================================================================== */
 async function loadAdminStories() {
   try {
     storiesCache = await fetchStories();
     renderAdminStories(storiesCache);
   } catch (err) {
-    console.error('Error loading stories for admin:', err);
-    adminStoriesList.innerHTML = `<p style="color: var(--accent); text-align: center;">তালিকা লোড করা যায়নি।</p>`;
+    console.error('Error loading stories:', err);
+    adminStoriesList.innerHTML = `<p style="color: var(--accent); text-align: center;">ডাটা লোড করা যায়নি। Supabase RLS Policy চেক করুন।</p>`;
   }
 }
 
@@ -64,7 +52,7 @@ function renderAdminStories(stories) {
       : '';
 
     return `
-      <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <div>
           <h4 style="font-size: 1.1rem; margin-bottom: 0.25rem;">${escapeHtml(story.title || 'শিরোনামহীন')}</h4>
           <span style="font-size: 0.85rem; color: var(--text-muted);">
@@ -80,9 +68,6 @@ function renderAdminStories(stories) {
   }).join('');
 }
 
-/* ==========================================================================
-   3. Form Submission (Create & Update Logic)
-   ========================================================================== */
 storyForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -92,49 +77,38 @@ storyForm.addEventListener('submit', async (e) => {
   const content = storyContentInput.value.trim();
   const coverFile = storyCoverInput.files[0];
 
-  submitBtn.innerText = 'সেভ করা হচ্ছে...';
+  submitBtn.innerText = 'সেভ হচ্ছে...';
   submitBtn.disabled = true;
 
   try {
     let imageUrl = currentExistingImageUrl;
 
-    // যদি নতুন কোনো ছবি আপলোড করা হয়
     if (coverFile) {
       imageUrl = await uploadCoverImage(coverFile);
     }
 
-    const payload = {
-      title,
-      author,
-      category,
-      content,
-      image_url: imageUrl
-    };
+    const payload = { title, author, category, content, image_url: imageUrl };
 
     if (isEditing) {
-      const id = storyIdInput.value;
-      await updateStory(id, payload);
-      alert('গল্পটি সফলভাবে আপডেট করা হয়েছে!');
+      await updateStory(storyIdInput.value, payload);
+      alert('গল্প আপডেট হয়েছে!');
     } else {
       await createStory(payload);
-      alert('নতুন গল্প সফলভাবে প্রকাশিত হয়েছে!');
+      alert('নতুন গল্প পোস্ট হয়েছে!');
     }
 
     resetForm();
     loadAdminStories();
 
   } catch (err) {
-    console.error('Save Story Error:', err);
-    alert('গল্প সেভ করতে সমস্যা হয়েছে: ' + (err.message || 'ত্রুটি'));
+    console.error('Save Error:', err);
+    alert('সেভ করা সম্ভব হয়নি: ' + (err.message || 'ত্রুটি'));
   } finally {
     submitBtn.innerText = isEditing ? 'আপডেট করুন' : 'গল্প পাবলিশ করুন';
     submitBtn.disabled = false;
   }
 });
 
-/* ==========================================================================
-   4. Edit and Delete Handlers
-   ========================================================================== */
 window.handleEdit = function(id) {
   const story = storiesCache.find(s => s.id === id);
   if (!story) return;
@@ -156,15 +130,15 @@ window.handleEdit = function(id) {
 };
 
 window.handleDelete = async function(id) {
-  if (!confirm('আপনি কি নিশ্চিত যে এই গল্পটি মুছে ফেলতে চান?')) return;
+  if (!confirm('আপনি কি নিশ্চিত মুছে ফেলতে চান?')) return;
 
   try {
     await deleteStory(id);
-    alert('গল্পটি সফলভাবে মুছে ফেলা হয়েছে!');
+    alert('গল্প মুছে ফেলা হয়েছে!');
     loadAdminStories();
   } catch (err) {
-    console.error('Delete Story Error:', err);
-    alert('গল্প মুছতে সমস্যা হয়েছে!');
+    console.error('Delete Error:', err);
+    alert('মুছে ফেলা সম্ভব হয়নি!');
   }
 };
 
@@ -179,9 +153,6 @@ function resetForm() {
   cancelEditBtn.style.display = 'none';
 }
 
-/* ==========================================================================
-   5. Search Event
-   ========================================================================== */
 function setupEventListeners() {
   cancelEditBtn.addEventListener('click', resetForm);
 
@@ -198,7 +169,6 @@ function setupEventListeners() {
   }
 }
 
-// XSS Utility
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)

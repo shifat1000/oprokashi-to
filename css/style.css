@@ -1,492 +1,284 @@
-/* ==========================================================================
-   অপ্রকাশিত V2 — Premium Dark & Glassmorphism Design System
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   1. Root Variables & Theme Tokens
-   -------------------------------------------------------------------------- */
 :root {
-  --bg-dark: #0f172a;
-  --bg-darker: #080d1a;
-  --bg-glass: rgba(15, 23, 42, 0.75);
-  --card-bg: rgba(30, 41, 59, 0.6);
-  --card-hover: rgba(30, 41, 59, 0.9);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-accent: rgba(56, 189, 248, 0.3);
-  
-  --primary: #38bdf8;
-  --primary-hover: #0284c7;
-  --accent: #f43f5e;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  
-  --font-main: 'Hind Siliguri', 'Noto Serif Bengali', system-ui, -apple-system, sans-serif;
-  
-  --glass-blur: blur(16px);
-  --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  --shadow-glow: 0 0 25px rgba(56, 189, 248, 0.15);
-  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    --bg-main: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.7);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --primary: #38bdf8;
+    --primary-hover: #0284c7;
+    --accent: #f43f5e;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
 }
 
-/* --------------------------------------------------------------------------
-   2. Base & Global Resets
-   -------------------------------------------------------------------------- */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-  font-family: var(--font-main);
-  background-color: var(--bg-darker);
-  color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Hind Siliguri', sans-serif;
 }
 
 body {
-  min-height: 100vh;
-  background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-darker) 70%);
-  background-attachment: fixed;
-  line-height: 1.6;
-  overflow-x: hidden;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    line-height: 1.6;
+    padding-bottom: 3rem;
 }
 
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-darker);
-}
-::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
-}
-
-/* Container */
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
 }
 
-/* --------------------------------------------------------------------------
-   3. Glassmorphism Navigation Bar
-   -------------------------------------------------------------------------- */
+/* Navbar */
 .navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: var(--bg-glass);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--border-color);
-  padding: 1rem 0;
-  transition: var(--transition-smooth);
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 1rem 0;
 }
 
 .navbar .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .logo {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--text-main);
-  text-decoration: none;
-  letter-spacing: -0.5px;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    text-decoration: none;
 }
 
 .logo span {
-  color: var(--primary);
+    color: var(--primary);
 }
 
 .nav-links {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-  align-items: center;
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
 }
 
 .nav-links a {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-weight: 500;
-  transition: var(--transition-smooth);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: 0.3s;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
-  color: var(--primary);
+.nav-links a:hover {
+    color: var(--primary);
 }
 
-/* --------------------------------------------------------------------------
-   4. Hero Section (Apple-inspired Clean Typography & Glass)
-   -------------------------------------------------------------------------- */
-.hero-section {
-  padding: 4rem 0 2rem;
-  text-align: center;
-  position: relative;
-}
-
-.hero-title {
-  font-size: 3rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 1rem;
-  animation: fadeIn 1s ease-out;
-}
-
-.hero-subtitle {
-  font-size: 1.2rem;
-  color: var(--text-muted);
-  max-width: 600px;
-  margin: 0 auto 2.5rem;
-}
-
-/* Search Bar Component */
-.search-box {
-  max-width: 550px;
-  margin: 0 auto 2rem;
-  position: relative;
-}
-
-.search-box input {
-  width: 100%;
-  padding: 1rem 1.5rem;
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid var(--border-color);
-  border-radius: 50px;
-  color: var(--text-main);
-  font-size: 1rem;
-  font-family: var(--font-main);
-  backdrop-filter: blur(10px);
-  transition: var(--transition-smooth);
-  outline: none;
-}
-
-.search-box input:focus {
-  border-color: var(--primary);
-  box-shadow: var(--shadow-glow);
-}
-
-/* Categories Filter Pills */
-.categories-filter {
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  margin-bottom: 3rem;
-}
-
-.cat-btn {
-  padding: 0.5rem 1.25rem;
-  border-radius: 30px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  color: var(--text-muted);
-  cursor: pointer;
-  font-family: var(--font-main);
-  font-size: 0.95rem;
-  transition: var(--transition-smooth);
-}
-
-.cat-btn:hover,
-.cat-btn.active {
-  background: var(--primary);
-  color: #000;
-  font-weight: 600;
-  border-color: var(--primary);
-  transform: translateY(-2px);
-}
-
-/* --------------------------------------------------------------------------
-   5. Dynamic Story Cards Grid (Netflix-style Zoom & Smooth Feel)
-   -------------------------------------------------------------------------- */
-.section-title {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.section-title::before {
-  content: '';
-  width: 4px;
-  height: 24px;
-  background: var(--primary);
-  border-radius: 2px;
-}
-
-.stories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-bottom: 4rem;
-}
-
-/* Story Card UI */
-.story-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  overflow: hidden;
-  backdrop-filter: var(--glass-blur);
-  transition: var(--transition-smooth);
-  text-decoration: none;
-  color: var(--text-main);
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.story-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  background: var(--card-hover);
-  border-color: var(--border-accent);
-  box-shadow: var(--shadow-card), var(--shadow-glow);
-}
-
-.card-image-wrapper {
-  width: 100%;
-  height: 180px;
-  overflow: hidden;
-  position: relative;
-  background: #1e293b;
-}
-
-.card-image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.story-card:hover .card-image-wrapper img {
-  transform: scale(1.08);
-}
-
-.card-body {
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.card-badge {
-  align-self: flex-start;
-  padding: 0.25rem 0.75rem;
-  background: rgba(56, 189, 248, 0.15);
-  color: var(--primary);
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-}
-
-.card-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 1.4;
-  margin-bottom: 0.5rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.card-excerpt {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  margin-bottom: 1rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  flex-grow: 1;
-}
-
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  border-top: 1px solid var(--border-color);
-  padding-top: 0.75rem;
-  margin-top: auto;
-}
-
-/* --------------------------------------------------------------------------
-   6. Story Details Page (`story.html`)
-   -------------------------------------------------------------------------- */
-.story-detail-container {
-  max-width: 800px;
-  margin: 2rem auto 4rem;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  padding: 2.5rem;
-  backdrop-filter: var(--glass-blur);
-}
-
-.story-header {
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.story-header .card-badge {
-  display: inline-block;
-  margin-bottom: 1rem;
-}
-
-.story-full-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  line-height: 1.3;
-  margin-bottom: 1rem;
-}
-
-.story-meta {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-}
-
-.story-cover-image {
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 2rem;
-}
-
-.story-content {
-  font-size: 1.15rem;
-  line-height: 1.8;
-  color: #e2e8f0;
-  white-space: pre-line;
-}
-
-.share-buttons {
-  display: flex;
-  gap: 1rem;
-  margin-top: 3rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
-}
-
-/* --------------------------------------------------------------------------
-   7. Admin Dashboard Styling (`admin.html`)
-   -------------------------------------------------------------------------- */
+/* Glassmorphism Cards */
 .admin-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 2rem;
-  backdrop-filter: var(--glass-blur);
-  margin-bottom: 2rem;
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
 }
 
+/* Forms */
 .form-group {
-  margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: var(--text-main);
-  font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
 }
 
 .form-control {
-  width: 100%;
-  padding: 0.85rem 1rem;
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  color: var(--text-main);
-  font-family: var(--font-main);
-  font-size: 1rem;
-  outline: none;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-main);
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
 }
 
 .form-control:focus {
-  border-color: var(--primary);
+    border-color: var(--primary);
 }
 
+/* Buttons */
 .btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-family: var(--font-main);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: var(--transition-smooth);
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
 }
 
 .btn-primary {
-  background: var(--primary);
-  color: #000;
+    background: var(--primary);
+    color: #000;
 }
 
 .btn-primary:hover {
-  background: var(--primary-hover);
-  color: #fff;
+    background: var(--primary-hover);
+    color: #fff;
 }
 
 .btn-danger {
-  background: var(--accent);
-  color: #fff;
+    background: var(--accent);
+    color: #fff;
 }
 
-/* --------------------------------------------------------------------------
-   8. Keyframe Animations
-   -------------------------------------------------------------------------- */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.btn-danger:hover {
+    opacity: 0.85;
 }
 
-/* --------------------------------------------------------------------------
-   9. Responsive Design
-   -------------------------------------------------------------------------- */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.2rem;
-  }
-  
-  .story-full-title {
-    font-size: 1.8rem;
-  }
-  
-  .story-detail-container {
-    padding: 1.5rem;
-  }
-  
-  .stories-grid {
-    grid-template-columns: 1fr;
-  }
+
+/* Additional Styles for UI & Cards */
+.stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.story-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border-color: var(--primary);
+}
+
+.story-cover-wrapper {
+    position: relative;
+    width: 100%;
+    height: 180px;
+}
+
+.story-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.story-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(5px);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.story-details {
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.story-title {
+    font-size: 1.25rem;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.story-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.story-excerpt {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+}
+
+.read-more-btn {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    padding: 0;
+}
+
+.filter-btn {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+.filter-btn.active, .filter-btn:hover {
+    background: var(--primary);
+    color: #000;
+    border-color: var(--primary);
+}
+
+/* Modal UI */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    overflow-y: auto;
+}
+
+.modal-content {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    margin: 5% auto;
+    padding: 2rem;
+    width: 90%;
+    max-width: 700px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+}
+
+.close-btn {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 2rem;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: var(--accent);
 }
