@@ -1,10 +1,8 @@
 /* ==========================================================================
-   অপ্রকাশিত V2 — Admin Panel Controller (Full CRUD & Supabase Storage)
+   অপ্রকাশিত V2 — Admin Panel Controller (Direct Access - No Login)
    ========================================================================== */
 
 import { 
-  getCurrentUser, 
-  logoutAdmin, 
   fetchStories, 
   createStory, 
   updateStory, 
@@ -24,7 +22,6 @@ const storyContentInput = document.getElementById('storyContent');
 const submitBtn = document.getElementById('submitBtn');
 const cancelEditBtn = document.getElementById('cancelEditBtn');
 const formTitle = document.getElementById('formTitle');
-const logoutBtn = document.getElementById('logoutBtn');
 
 const adminStoriesList = document.getElementById('adminStoriesList');
 const adminSearchInput = document.getElementById('adminSearchInput');
@@ -35,15 +32,9 @@ let isEditing = false;
 let currentExistingImageUrl = '';
 
 /* ==========================================================================
-   1. Auth Guard & Initial Load
+   1. Initial Load (No Auth Check Required)
    ========================================================================== */
-document.addEventListener('DOMContentLoaded', async () => {
-  const user = await getCurrentUser();
-  if (!user) {
-    window.location.href = 'login.html';
-    return;
-  }
-
+document.addEventListener('DOMContentLoaded', () => {
   loadAdminStories();
   setupEventListeners();
 });
@@ -189,24 +180,22 @@ function resetForm() {
 }
 
 /* ==========================================================================
-   5. Search and Logout Events
+   5. Search Event
    ========================================================================== */
 function setupEventListeners() {
   cancelEditBtn.addEventListener('click', resetForm);
 
-  logoutBtn.addEventListener('click', async () => {
-    await logoutAdmin();
-  });
-
-  adminSearchInput.addEventListener('input', (e) => {
-    const q = e.target.value.toLowerCase().trim();
-    const filtered = storiesCache.filter(s => 
-      (s.title && s.title.toLowerCase().includes(q)) ||
-      (s.author && s.author.toLowerCase().includes(q)) ||
-      (s.category && s.category.toLowerCase().includes(q))
-    );
-    renderAdminStories(filtered);
-  });
+  if (adminSearchInput) {
+    adminSearchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const filtered = storiesCache.filter(s => 
+        (s.title && s.title.toLowerCase().includes(q)) ||
+        (s.author && s.author.toLowerCase().includes(q)) ||
+        (s.category && s.category.toLowerCase().includes(q))
+      );
+      renderAdminStories(filtered);
+    });
+  }
 }
 
 // XSS Utility
