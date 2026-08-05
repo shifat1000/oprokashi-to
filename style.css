@@ -1,80 +1,45 @@
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-
-html{
-    scroll-behavior:smooth;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 
 body{
 
-    font-family:"Noto Sans Bengali", sans-serif;
+background:#050505;
 
-    background:#050505;
+color:white;
 
-    color:white;
-
-}
-
-
-
-/* HERO */
-
-.hero{
-
-    min-height:100vh;
-
-    background:
-    linear-gradient(
-        rgba(0,0,0,.55),
-        rgba(0,0,0,.85)
-    ),
-    url("background.jpg");
-
-
-    background-size:cover;
-
-    background-position:center;
-
-
-    position:relative;
+font-family:"Noto Sans Bengali",sans-serif;
 
 }
 
 
+.navbar{
 
-/* NAVBAR */
+position:absolute;
 
-nav{
+top:0;
 
-    width:90%;
+width:100%;
 
-    margin:auto;
+padding:30px 8%;
 
-    padding:30px 0;
+display:flex;
 
+justify-content:space-between;
 
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
+z-index:10;
 
 }
-
 
 
 .logo{
 
-    font-size:32px;
+font-size:30px;
 
-    font-weight:bold;
-
-    letter-spacing:3px;
+font-weight:bold;
 
 }
 
@@ -82,61 +47,42 @@ nav{
 
 .menu a{
 
-    color:white;
+color:white;
 
-    text-decoration:none;
+text-decoration:none;
 
-    margin-left:30px;
-
-    font-size:17px;
-
-    opacity:.8;
-
-    transition:.3s;
+margin-left:25px;
 
 }
 
 
 
-.menu a:hover{
+.hero{
 
-    opacity:1;
+height:100vh;
 
-    color:#d4af37;
+background:
 
-}
+linear-gradient(
+rgba(0,0,0,.6),
+rgba(0,0,0,.9)
+),
 
-
-
-
-/* HERO CONTENT */
-
-
-.hero-content{
-
-    height:80vh;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:center;
-
-    align-items:center;
-
-    text-align:center;
-
-}
+url("background.jpg");
 
 
+background-size:cover;
 
-.small{
+background-position:center;
 
-    color:#d4af37;
 
-    letter-spacing:5px;
+display:flex;
 
-    text-transform:uppercase;
+align-items:center;
+
+justify-content:center;
+
+text-align:center;
 
 }
 
@@ -144,221 +90,100 @@ nav{
 
 .hero h1{
 
-    font-size:100px;
+font-size:90px;
 
-    letter-spacing:15px;
-
-    margin:20px 0;
-
-
-    animation:fade 1.5s;
+letter-spacing:10px;
 
 }
 
 
 
-.hero-content p{
+.hero p{
 
-    font-size:22px;
+font-size:22px;
 
-    line-height:2;
+line-height:2;
 
-    color:#ddd;
+color:#ddd;
 
-}
-
-
-
-.main-btn{
-
-    margin-top:40px;
-
-    padding:16px 45px;
-
-
-    background:white;
-
-    color:black;
-
-    text-decoration:none;
-
-
-    border-radius:50px;
-
-
-    transition:.4s;
+margin:25px;
 
 }
 
 
 
-.main-btn:hover{
+.btn{
 
-    background:#d4af37;
+background:white;
 
-    color:white;
+color:black;
 
-    transform:translateY(-5px);
+padding:15px 40px;
+
+border-radius:40px;
+
+text-decoration:none;
 
 }
 
-
-
-
-/* SECTION */
 
 
 section{
 
-    padding:100px 7%;
+padding:90px 8%;
 
 }
 
 
 
-.section-title{
+.stories{
 
-    text-align:center;
+background:#090909;
 
-    margin-bottom:60px;
-
-}
-
-
-.section-title p{
-
-    color:#d4af37;
-
-    letter-spacing:3px;
-
-}
-
-
-.section-title h2{
-
-    font-size:45px;
-
-    margin-top:15px;
+text-align:center;
 
 }
 
 
 
+.stories h2,
+.about h2{
 
-/* FEATURED */
+font-size:45px;
 
-
-.featured-card{
-
-
-    min-height:350px;
-
-
-    border-radius:30px;
-
-
-    padding:50px;
-
-
-    display:flex;
-
-    align-items:center;
-
-
-
-    background:
-
-    linear-gradient(
-    135deg,
-    rgba(255,255,255,.1),
-    rgba(255,255,255,.02)
-    );
-
-
-    backdrop-filter:blur(20px);
-
-
-    border:1px solid rgba(255,255,255,.1);
-
-
+margin-bottom:40px;
 
 }
 
 
 
-.featured-card h3{
+.story-list{
 
-    font-size:45px;
+display:flex;
 
-}
+gap:30px;
 
+justify-content:center;
 
-
-.featured-card p{
-
-    margin:20px 0;
-
-    color:#ccc;
-
-    font-size:20px;
+flex-wrap:wrap;
 
 }
-
-
-.featured-card a{
-
-    color:white;
-
-    text-decoration:none;
-
-}
-
-
-
-
-
-/* STORY CARDS */
-
-
-.cards{
-
-
-    display:grid;
-
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(280px,1fr));
-
-
-    gap:30px;
-
-}
-
 
 
 
 .card{
 
+width:300px;
 
-    padding:35px;
+padding:30px;
 
+background:#151515;
 
-    background:
+border-radius:20px;
 
-    rgba(255,255,255,.05);
+border:1px solid #333;
 
-
-    backdrop-filter:blur(15px);
-
-
-    border-radius:25px;
-
-
-    border:1px solid rgba(255,255,255,.1);
-
-
-    transition:.5s;
-
+transition:.3s;
 
 }
 
@@ -366,35 +191,7 @@ section{
 
 .card:hover{
 
-
-    transform:translateY(-15px);
-
-
-    border-color:#d4af37;
-
-
-}
-
-
-
-
-.card span{
-
-
-    color:#d4af37;
-
-    font-size:14px;
-
-
-}
-
-
-
-.card h3{
-
-    font-size:30px;
-
-    margin:20px 0;
+transform:translateY(-10px);
 
 }
 
@@ -402,91 +199,72 @@ section{
 
 .card p{
 
-    color:#bbb;
+color:#bbb;
 
-    line-height:1.8;
-
-}
-
-
-
-.card a{
-
-    display:inline-block;
-
-    margin-top:25px;
-
-    color:white;
-
-    text-decoration:none;
+margin:20px 0;
 
 }
 
 
 
+.card button{
 
-/* FOOTER */
+padding:10px 25px;
+
+border:none;
+
+border-radius:20px;
+
+}
+
+
+
+.about{
+
+text-align:center;
+
+background:#000;
+
+}
+
+
+
+.about p{
+
+font-size:20px;
+
+line-height:2;
+
+color:#ccc;
+
+}
+
 
 
 footer{
 
-    padding:50px;
+padding:40px;
 
-    text-align:center;
+text-align:center;
 
-    background:#000;
+background:#000;
 
-
-}
-
-
-footer h2{
-
-    font-size:35px;
+color:#777;
 
 }
 
 
 
+@media(max-width:700px){
 
+.hero h1{
 
-/* ANIMATION */
-
-
-@keyframes fade{
-
-
-from{
-
-opacity:0;
-
-transform:translateY(40px);
+font-size:50px;
 
 }
 
 
-to{
-
-opacity:1;
-
-transform:translateY(0);
-
-}
-
-
-}
-
-
-
-
-
-/* MOBILE */
-
-
-@media(max-width:768px){
-
-
-nav{
+.navbar{
 
 flex-direction:column;
 
@@ -495,76 +273,285 @@ gap:20px;
 }
 
 
+}
 
-.menu a{
 
-margin:10px;
+/* ADMIN PANEL */
+
+
+.admin-container{
+
+min-height:100vh;
+
+background:
+linear-gradient(
+rgba(0,0,0,.8),
+rgba(0,0,0,.95)
+),
+url("background.jpg");
+
+
+background-size:cover;
+
+padding:50px 8%;
 
 }
 
 
-
-.hero h1{
-
-font-size:55px;
-
-letter-spacing:8px;
-
-}
-
-
-
-.hero-content p{
-
-font-size:17px;
-
-}
-
-
-
-.section-title h2{
-
-font-size:35px;
-
-}
-
-
-
-.featured-card h3{
-
-font-size:35px;
-
-}
-
-
-
-}
-.about{
-
-padding:100px 7%;
+.admin-container h1{
 
 text-align:center;
 
-background:#080808;
-
-}
-
-
-.about h2{
-
 font-size:45px;
 
-margin-bottom:20px;
+margin-bottom:40px;
 
 }
 
 
-.about p{
 
-color:#ccc;
+.admin-container form{
 
-font-size:20px;
+max-width:700px;
 
-line-height:2;
+margin:auto;
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(15px);
+
+padding:40px;
+
+border-radius:25px;
+
+}
+
+
+
+.admin-container label{
+
+display:block;
+
+margin:20px 0 10px;
+
+color:#d4af37;
+
+}
+
+
+
+.admin-container input,
+.admin-container textarea,
+.admin-container select{
+
+
+width:100%;
+
+padding:15px;
+
+background:#111;
+
+color:white;
+
+border:1px solid #333;
+
+border-radius:10px;
+
+
+font-size:16px;
+
+}
+
+
+
+.admin-container button{
+
+
+margin-top:30px;
+
+width:100%;
+
+padding:15px;
+
+border:none;
+
+border-radius:30px;
+
+background:white;
+
+font-size:18px;
+
+cursor:pointer;
+
+
+}
+
+
+/* ADMIN PANEL */
+
+
+.admin-container{
+
+min-height:100vh;
+
+background:
+
+linear-gradient(
+rgba(0,0,0,.8),
+rgba(0,0,0,.95)
+),
+
+url("background.jpg");
+
+
+background-size:cover;
+
+padding:60px 20px;
+
+
+}
+
+
+
+.admin-card{
+
+max-width:700px;
+
+margin:auto;
+
+
+background:
+
+rgba(255,255,255,.08);
+
+
+backdrop-filter:blur(20px);
+
+
+padding:40px;
+
+
+border-radius:25px;
+
+
+border:1px solid rgba(255,255,255,.15);
+
+
+}
+
+
+
+.admin-card h1{
+
+text-align:center;
+
+font-size:50px;
+
+}
+
+
+
+.admin-card h2{
+
+text-align:center;
+
+color:#d4af37;
+
+margin-bottom:40px;
+
+}
+
+
+
+.admin-card label{
+
+display:block;
+
+margin:20px 0 10px;
+
+color:#d4af37;
+
+}
+
+
+
+.admin-card input,
+.admin-card select,
+.admin-card textarea{
+
+
+width:100%;
+
+padding:15px;
+
+
+background:#111;
+
+color:white;
+
+
+border:1px solid #444;
+
+
+border-radius:10px;
+
+
+font-size:16px;
+
+
+}
+
+
+
+.admin-card textarea{
+
+height:250px;
+
+resize:none;
+
+}
+
+
+
+#preview{
+
+width:200px;
+
+margin-top:20px;
+
+border-radius:15px;
+
+display:none;
+
+}
+
+
+
+.admin-card button{
+
+
+margin-top:30px;
+
+
+width:100%;
+
+
+padding:16px;
+
+
+border:none;
+
+
+border-radius:30px;
+
+
+font-size:18px;
+
+
+cursor:pointer;
+
+
+background:white;
+
 
 }
