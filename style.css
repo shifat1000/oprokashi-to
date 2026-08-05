@@ -2,57 +2,116 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Noto Sans Bengali", sans-serif;
 }
 
 body {
-    background: #0f0f0f;
+    font-family: "Noto Sans Bengali", Arial, sans-serif;
+    background: #000;
     color: white;
 }
 
+
+/* Hero Section */
 .hero {
     height: 100vh;
+    width: 100%;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     text-align: center;
     padding: 20px;
 
-    background: linear-gradient(
-        rgba(0,0,0,0.7),
-        rgba(0,0,0,0.9)
+    background:
+    linear-gradient(
+        rgba(0,0,0,0.65),
+        rgba(0,0,0,0.90)
     ),
     url("background.jpg");
 
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
 }
 
+
+/* Website Title */
 .hero h1 {
-    font-size: 70px;
-    letter-spacing: 5px;
-    margin-bottom: 20px;
+    font-size: 80px;
+    font-weight: 700;
+    letter-spacing: 8px;
+
+    margin-bottom: 25px;
+
+    text-shadow:
+    0 0 10px rgba(255,255,255,0.3),
+    0 0 30px rgba(255,255,255,0.2);
 }
 
+
+/* Description */
 .hero p {
-    font-size: 22px;
+    font-size: 24px;
     line-height: 1.8;
+
     color: #ddd;
+
+    max-width: 600px;
+
+    margin-bottom: 40px;
 }
 
+
+/* Button */
 .btn {
-    margin-top: 40px;
-    padding: 15px 40px;
-    background: #ffffff;
-    color: #000;
+    display: inline-block;
+
+    padding: 16px 45px;
+
+    background: white;
+    color: black;
+
     text-decoration: none;
-    border-radius: 30px;
+
     font-size: 18px;
-    transition: 0.3s;
+    font-weight: bold;
+
+    border-radius: 50px;
+
+    transition: 0.4s;
 }
 
+
+/* Button Hover */
 .btn:hover {
-    background: #ffcc00;
-    transform: scale(1.05);
+
+    background: #c9a227;
+    color: white;
+
+    transform: translateY(-5px);
+
+}
+
+
+/* Mobile Responsive */
+@media(max-width:768px){
+
+    .hero h1 {
+        font-size: 50px;
+        letter-spacing: 4px;
+    }
+
+
+    .hero p {
+        font-size: 18px;
+    }
+
+
+    .btn {
+        padding: 14px 35px;
+        font-size: 16px;
+    }
+
 }
