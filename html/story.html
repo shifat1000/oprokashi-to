@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>গল্প — অপ্রকাশিত</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">অপ্রকাশিত<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">হোম</a></li>
+                <li><a href="admin.html">এডমিন</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Story Container -->
+    <main class="container">
+        
+        <!-- Story Main Wrapper -->
+        <article class="story-detail-container" id="storyContainer">
+            <p style="text-align: center; color: var(--text-muted);">গল্প লোড করা হচ্ছে...</p>
+        </article>
+
+        <!-- Related Stories Section -->
+        <section id="relatedSection" style="margin-top: 4rem; display: none;">
+            <h2 class="section-title">সম্পর্কিত গল্পসমূহ</h2>
+            <div class="stories-grid" id="relatedGrid">
+                <!-- JS দিয়ে একই ক্যাটাগরির গল্পসমূহ লোড হবে -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 4rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+        <div class="container">
+            <p>&copy; 2026 অপ্রকাশিত। সর্বস্বত্ব সংরক্ষিত।</p>
+        </div>
+    </footer>
+
+    <!-- Supabase CDN Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Story Detail Script Logic -->
+    <script type="module">
+        import { fetchStoryById, fetchRelatedStories } from './js/supabase.js';
+
+        const storyContainer = document.getElementById('storyContainer');
+        const relatedSection = document.getElementById('relatedSection');
+        const relatedGrid = document.getElementById('relatedGrid');
+
+        // URL থেকে ID নেওয়া
+        const urlParams = new URLSearchParams(window.location.search);
+        const storyId = urlParams.get('id');
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!storyId) {
+                renderError('কোনো গল্প নির্দিষ্ট করা হয়নি।');
+                return;
+            }
+
+            try {
+                const story = await fetchStoryById(storyId);
+                
+                if (!story) {
+                    renderError('গল্পটি পাওয়া যায়নি বা মুছে ফেলা হয়েছে।');
+                    return;
+                }
+
+                // Title সেট করা
+                document.title = `${story.title || 'গল্প'} — অপ্রকাশিত`;
+
+                // Story Details Render করা
+                renderStoryDetail(story);
+
+                // Related Stories Load করা
+                if (story.category) {
+                    loadRelatedStories(story.category, story.id);
+                }
+
+            } catch (error) {
+                console.error('Error fetching story:', error);
+                renderError('গল্পটি লোড করতে সমস্যা হয়েছে।');
+            }
+        });
+
+        function renderStoryDetail(story) {
+            const formattedDate = story.created_at
+                ? new Date(story.created_at).toLocaleDateString('bn-BD', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })
+                : '';
+
+            const coverImgHtml = story.image_url
+                ? `<img src="${escapeHtml(story.image_url)}" alt="${escapeHtml(story.title)}" class="story-cover-image">`
+                : '';
+
+            storyContainer.innerHTML = `
+                <header class="story-header">
+                    <span class="card-badge">${escapeHtml(story.category || 'অন্যান্য')}</span>
+                    <h1 class="story-full-title">${escapeHtml(story.title || 'শিরোনামহীন গল্প')}</h1>
+                    <div class="story-meta">
+                        <span>✍️ <strong>${escapeHtml(story.author || 'অপ্রকাশিত লেখক')}</strong></span>
+                        <span>📅 ${formattedDate}</span>
+                    </div>
+                </header>
+
+                ${coverImgHtml}
+
+                <div class="story-content">
+                    ${escapeHtml(story.content || '')}
+                </div>
+
+                <div class="share-buttons">
+                    <button class="btn btn-primary" onclick="copyStoryLink()">🔗 লিংক কপি করুন</button>
+                    <button class="btn" style="background: #1877f2; color: white;" onclick="shareOnFacebook()">ফেসবুকে শেয়ার করুন</button>
+                </div>
+            `;
+        }
+
+        async function loadRelatedStories(category, currentId) {
+            try {
+                const relatedStories = await fetchRelatedStories(category, currentId, 3);
+                
+                if (relatedStories && relatedStories.length > 0) {
+                    relatedSection.style.display = 'block';
+                    relatedGrid.innerHTML = relatedStories.map(story => {
+                        const coverImg = story.image_url || 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=600&q=80';
+                        const excerpt = story.content ? story.content.substring(0, 100) + '...' : '';
+                        
+                        return `
+                            <a href="story.html?id=${story.id}" class="story-card">
+                                <div class="card-image-wrapper">
+                                    <img src="${escapeHtml(coverImg)}" alt="${escapeHtml(story.title)}" loading="lazy">
+                                </div>
+                                <div class="card-body">
+                                    <span class="card-badge">${escapeHtml(story.category || 'অন্যান্য')}</span>
+                                    <h3 class="card-title">${escapeHtml(story.title || 'শিরোনামহীন')}</h3>
+                                    <p class="card-excerpt">${escapeHtml(excerpt)}</p>
+                                </div>
+                            </a>
+                        `;
+                    }).join('');
+                }
+            } catch (err) {
+                console.error('Related stories error:', err);
+            }
+        }
+
+        function renderError(message) {
+            storyContainer.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <p style="color: var(--accent); font-size: 1.2rem; margin-bottom: 1.5rem;">${message}</p>
+                    <a href="index.html" class="btn btn-primary">হোমপেজে ফিরে যান</a>
+                </div>
+            `;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Global Helper Functions for Social Sharing
+        window.copyStoryLink = function() {
+            navigator.clipboard.writeText(window.location.href);
+            alert('গল্পের লিংক কপি করা হয়েছে!');
+        };
+
+        window.shareOnFacebook = function() {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+        };
+    </script>
+
+</body>
+</html>

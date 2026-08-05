@@ -1,141 +1,88 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>অপ্রকাশিত</title>
-
-<link rel="stylesheet" href="style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অপ্রকাশিত — গল্পের এক অন্য দুনিয়া</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">অপ্রকাশিত<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">হোম</a></li>
+                <li><a href="admin.html">এডমিন</a></li>
+            </ul>
+        </div>
+    </nav>
 
-<nav class="navbar">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">অপ্রকাশিত অনুভূতির গল্পমালা</h1>
+            <p class="hero-subtitle">শব্দে সাজানো হাজারো অপ্রকাশিত অনুভূতি এবং রোমাঞ্চকর গল্পের সমাহার</p>
+            
+            <!-- Dynamic Search Box -->
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="গল্পের নাম বা লেখকের নাম দিয়ে খুঁজুন...">
+            </div>
 
-<div class="logo">
-অপ্রকাশিত
-</div>
+            <!-- Category Filter Pills -->
+            <div class="categories-filter" id="categoryContainer">
+                <button class="cat-btn active" data-category="সব">সব গল্প</button>
+                <button class="cat-btn" data-category="রোমান্টিক">রোমান্টিক</button>
+                <button class="cat-btn" data-category="থ্রিলার">থ্রিলার</button>
+                <button class="cat-btn" data-category="হরর">হরর</button>
+                <button class="cat-btn" data-category="জীবনমুখী">জীবনমুখী</button>
+                <button class="cat-btn" data-category="অন্যান্য">অন্যান্য</button>
+            </div>
+        </div>
+    </section>
 
-<div class="menu">
-<a href="index.html">হোম</a>
-<a href="#stories">গল্প</a>
-<a href="#about">আমাদের সম্পর্কে</a>
-</div>
+    <!-- Main Content Area -->
+    <main class="container">
+        
+        <!-- Featured / Trending Stories Section -->
+        <section id="trendingSection" style="margin-bottom: 3rem; display: none;">
+            <h2 class="section-title">ট্রেন্ডিং গল্পসমূহ</h2>
+            <div class="stories-grid" id="trendingGrid">
+                <!-- JS দিয়ে ট্রেন্ডিং গল্পসমূহ এখানে লোড হবে -->
+            </div>
+        </section>
 
-</nav>
+        <!-- All Stories Grid Section -->
+        <section>
+            <h2 class="section-title" id="storiesTitle">সর্বশেষ গল্পসমূহ</h2>
+            <div class="stories-grid" id="storiesGrid">
+                <!-- Loading Skeleton / Message -->
+                <p style="color: var(--text-muted); grid-column: 1/-1; text-align: center;">গল্প লোড করা হচ্ছে...</p>
+            </div>
+        </section>
 
+    </main>
 
+    <!-- Footer -->
+    <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 4rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+        <div class="container">
+            <p>&copy; 2026 অপ্রকাশিত। সর্বস্বত্ব সংরক্ষিত।</p>
+        </div>
+    </footer>
 
-<header class="hero">
-
-<div class="hero-content">
-
-<h1>অপ্রকাশিত</h1>
-
-<p>
-যে গল্পগুলো বলা হয়নি,<br>
-সেগুলোই এখানে লেখা আছে।
-</p>
-
-
-<a href="#stories" class="btn">
-গল্প আবিষ্কার করুন
-</a>
-
-
-</div>
-
-</header>
-
-
-
-<section id="stories" class="stories">
-
-<h2>
-সাম্প্রতিক গল্প
-</h2>
-
-
-<div id="storyList" class="story-list">
-
-
-<div class="card">
-
-<h3>
-শেষ চিঠি
-</h3>
-
-<p>
-কিছু অনুভূতি কখনো বলা হয় না।
-</p>
-
-<button>
-পড়ুন
-</button>
-
-</div>
-
-
-<div class="card">
-
-<h3>
-অজানা অনুভূতি
-</h3>
-
-<p>
-মনের গভীরে লুকিয়ে থাকা কিছু কথা।
-</p>
-
-<button>
-পড়ুন
-</button>
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-<section id="about" class="about">
-
-<h2>
-অপ্রকাশিত সম্পর্কে
-</h2>
-
-<p>
-যে অনুভূতিগুলো প্রকাশ করা হয়নি,
-যে গল্পগুলো হারিয়ে গেছে নীরবতায়,
-অপ্রকাশিত তাদের জন্য একটি জায়গা।
-</p>
-
-
-</section>
-
-
-
-<footer>
-
-<h3>
-অপ্রকাশিত
-</h3>
-
-<p>
-সব না বলা গল্পের ঠিকানা
-</p>
-
-</footer>
-
-
-
-<script src="script.js"></script>
+    <!-- Supabase CDN Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- App Logic Script -->
+    <script type="module" src="js/app.js"></script>
 
 </body>
 </html>

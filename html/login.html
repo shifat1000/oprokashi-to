@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>এডমিন লগইন — অপ্রকাশিত</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">অপ্রকাশিত<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">হোম</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Login Container -->
+    <main class="container" style="max-width: 450px; margin-top: 4rem;">
+        <div class="admin-card">
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">এডমিন লগইন</h2>
+            
+            <div id="loginAlert" style="display: none; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; background: rgba(244, 63, 94, 0.2); color: var(--accent); font-size: 0.9rem; text-align: center;"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">ইমেইল</label>
+                    <input type="email" id="email" class="form-control" placeholder="admin@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">পাসওয়ার্ড</label>
+                    <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" id="loginBtn" class="btn btn-primary" style="width: 100%;">লগইন করুন</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Supabase CDN Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Login Logic -->
+    <script type="module">
+        import { loginAdmin, getCurrentUser } from './js/supabase.js';
+
+        const loginForm = document.getElementById('loginForm');
+        const loginAlert = document.getElementById('loginAlert');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // চেক করা আগে থেকেই লগইন আছে কিনা
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = await getCurrentUser();
+            if (user) {
+                window.location.href = 'admin.html';
+            }
+        });
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            loginAlert.style.display = 'none';
+            loginBtn.innerText = 'প্রবেশ করা হচ্ছে...';
+            loginBtn.disabled = true;
+
+            try {
+                await loginAdmin(email, password);
+                window.location.href = 'admin.html';
+            } catch (err) {
+                loginAlert.innerText = 'লগইন ব্যর্থ হয়েছে: ' + (err.message || 'ইমেইল বা পাসওয়ার্ড ভুল।');
+                loginAlert.style.display = 'block';
+                loginBtn.innerText = 'লগইন করুন';
+                loginBtn.disabled = false;
+            }
+        });
+    </script>
+
+</body>
+</html>
