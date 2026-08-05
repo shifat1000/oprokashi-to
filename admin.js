@@ -32,7 +32,7 @@ form.addEventListener("submit", async function(e){
 
     if(error){
 
-        console.log(error);
+      console.log(JSON.stringify(error, null, 2));
 
         message.innerHTML =
         "❌ গল্প প্রকাশ হয়নি";
