@@ -10,8 +10,9 @@
       --primary: #4f46e5;
       --danger: #ef4444;
       --warning: #f59e0b;
-      --bg: #f1f5f9;
+      --bg: #f8fafc;
       --card: #ffffff;
+      --border: #e2e8f0;
     }
 
     body {
@@ -34,19 +35,16 @@
       background: var(--card);
       padding: 25px;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
       margin-bottom: 30px;
     }
 
     .form-group { margin-bottom: 18px; }
 
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-    }
+    label { display: block; margin-bottom: 8px; font-weight: 600; }
 
-    input[type="text"], textarea {
+    input[type="text"], select, textarea {
       width: 100%;
       padding: 12px;
       border: 1px solid #cbd5e1;
@@ -56,7 +54,7 @@
       box-sizing: border-box;
     }
 
-    textarea { height: 140px; resize: vertical; }
+    textarea { height: 160px; resize: vertical; }
 
     .btn-group { display: flex; gap: 10px; }
 
@@ -76,14 +74,9 @@
     .btn-edit { background: var(--warning); color: black; padding: 6px 12px; font-size: 14px; }
     .btn-delete { background: var(--danger); padding: 6px 12px; font-size: 14px; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-
-    th, td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; }
-    th { background: #f8fafc; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { border: 1px solid var(--border); padding: 12px; text-align: left; }
+    th { background: #f1f5f9; }
 
     .visit-site {
       text-decoration: none;
@@ -103,7 +96,6 @@
     <a href="index.html" class="visit-site" target="_blank">লাইভ সাইট দেখুন ↗</a>
   </div>
 
-  <!-- ১. গল্প যোগ/এডিট ফর্ম -->
   <div class="admin-card">
     <h2 id="formTitle">নতুন গল্প পোস্ট করুন</h2>
     <form id="storyForm">
@@ -115,8 +107,18 @@
       </div>
 
       <div class="form-group">
+        <label for="category">ক্যাটাগরি:</label>
+        <select id="category">
+          <option value="রোমান্টিক">রোমান্টিক</option>
+          <option value="থ্রিলার">থ্রিলার</option>
+          <option value="হরর">হরর</option>
+          <option value="জীবনমুখী">জীবনমুখী</option>
+        </select>
+      </div>
+
+      <div class="form-group">
         <label for="content">গল্পের বিবরণ:</label>
-        <textarea id="content" required placeholder="গল্প লিখুন... ডায়লগ প্রকাশের জন্য কোটেশন (&quot; &quot; বা “ ”) ব্যবহার করুন।"></textarea>
+        <textarea id="content" required placeholder="গল্প লিখুন... উক্তির জায়গায় কোটেশন (&quot; &quot; বা “ ”) ব্যবহার করুন।"></textarea>
       </div>
 
       <div class="btn-group">
@@ -126,14 +128,13 @@
     </form>
   </div>
 
-  <!-- ২. গল্পের তালিকা ম্যানেজমেন্ট -->
   <div class="admin-card">
     <h2>প্রকাশিত গল্পসমূহ (ম্যানেজ করুন)</h2>
     <table>
       <thead>
         <tr>
           <th>শিরোনাম</th>
-          <th>সারাংশ</th>
+          <th>ক্যাটাগরি</th>
           <th>অ্যাকশন</th>
         </tr>
       </thead>
@@ -141,9 +142,8 @@
     </table>
   </div>
 
-  <!-- ৩. ওয়েবসাইট সেটিং (অ্যাপ ইনফো ও যোগাযোগ পরিবর্তন) -->
   <div class="admin-card">
-    <h2>সাইটের তথ্য পরিবর্তন (Settings)</h2>
+    <h2>সাইটের তথ্য সংশোধন (Settings)</h2>
     <form id="settingsForm">
       <div class="form-group">
         <label for="appInfoInput">অ্যাপ সম্পর্কে বিবরণ:</label>
@@ -152,7 +152,6 @@
 
       <div class="form-group">
         <label for="contactInfoInput">যোগাযোগের বিবরণ:</label>
-
         <textarea id="contactInfoInput" required></textarea>
       </div>
 
@@ -173,6 +172,7 @@
   const storyForm = document.getElementById('storyForm');
   const storyIdInput = document.getElementById('storyId');
   const titleInput = document.getElementById('title');
+  const categoryInput = document.getElementById('category');
   const contentInput = document.getElementById('content');
   const submitBtn = document.getElementById('submitBtn');
   const cancelBtn = document.getElementById('cancelBtn');
@@ -189,19 +189,19 @@
     loadSettingsIntoForm();
   });
 
-  // গল্প সাবমিট করা
   storyForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const title = titleInput.value.trim();
+    const category = categoryInput.value;
     const content = contentInput.value.trim();
     const id = storyIdInput.value;
 
     if (!title || !content) return;
 
     if (id) {
-      stories = stories.map(s => s.id === id ? { ...s, title, content } : s);
+      stories = stories.map(s => s.id === id ? { ...s, title, category, content } : s);
     } else {
-      stories.unshift({ id: Date.now().toString(), title, content });
+      stories.unshift({ id: Date.now().toString(), title, category, content });
     }
 
     localStorage.setItem('app_stories', JSON.stringify(stories));
@@ -220,7 +220,7 @@
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td><strong>${escapeHtml(story.title)}</strong></td>
-        <td>${escapeHtml(story.content.substring(0, 40))}...</td>
+        <td>${story.category || 'সাধারণ'}</td>
         <td>
           <button class="btn-edit" onclick="editStory('${story.id}')">এডিট</button>
           <button class="btn-delete" onclick="deleteStory('${story.id}')">ডিলিট</button>
@@ -236,6 +236,7 @@
 
     storyIdInput.value = story.id;
     titleInput.value = story.title;
+    categoryInput.value = story.category || 'রোমান্টিক';
     contentInput.value = story.content;
 
     formTitle.textContent = 'গল্প সংশোধন/এডিট করুন';
@@ -262,7 +263,6 @@
     cancelBtn.style.display = 'none';
   }
 
-  // সাইট সেটিং সেভ করা
   settingsForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const settings = {
@@ -271,13 +271,13 @@
       fbUrl: fbUrlInput.value.trim()
     };
     localStorage.setItem('site_settings', JSON.stringify(settings));
-    alert('সাইটের সেটিং সফলভাবে সেভ হয়েছে!');
+    alert('সেটিংস সফলভাবে সেভ হয়েছে!');
   });
 
   function loadSettingsIntoForm() {
     const settings = JSON.parse(localStorage.getItem("site_settings")) || {
-      appInfo: "আমাদের এই প্ল্যাটফর্মে সুন্দর সুন্দর মৌলিক গল্প ও অনুগল্প প্রকাশিত হয়। এখানে পাঠক খুব সহজে কোনো বিজ্ঞাপন ছাড়াই গল্প পড়তে পারবেন।",
-      contactInfo: "আপনার লেখা গল্প আমাদের প্ল্যাটফর্মে প্রকাশ করতে চান? আপনার গল্পটি আমাদের ফেসবুক পেজে মেসেজ করে পাঠাতে পারেন।",
+      appInfo: "আমাদের এই প্ল্যাটফর্মে কোনো বিজ্ঞাপন ছাড়াই আরামদায়ক পরিবেশে রোমাঞ্চকর ও আবেগঘন সব গল্প পড়া যায়।",
+      contactInfo: "আপনার লেখা গল্প আমাদের প্ল্যাটফর্মে পোস্ট করতে চাইলে আমাদের ফেসবুক পেজে পাঠাতে পারেন।",
       fbUrl: "https://facebook.com"
     };
 
@@ -292,4 +292,5 @@
 </script>
 
 </body>
+
 </html>
