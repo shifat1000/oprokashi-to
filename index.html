@@ -320,5 +320,63 @@
         }
     </script>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // আপনার আসল Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAliz-F-qzpblysGFB4Yephlo4hVPz_7Z0",
+    authDomain: "oprokashi-to.firebaseapp.com",
+    projectId: "oprokashi-to",
+    storageBucket: "oprokashi-to.firebasestorage.app",
+    messagingSenderId: "739451365790",
+    appId: "1:739451365790:web:1989b3da7ca6a1eab8be8f",
+    measurementId: "G-B6JZ36V59E"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  document.addEventListener("DOMContentLoaded", fetchStoriesFromFirebase);
+
+  function fetchStoriesFromFirebase() {
+    const grid = document.getElementById('storiesGrid');
+    grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">গল্প লোড হচ্ছে...</p>';
+
+    db.collection("stories").orderBy("createdAt", "desc").get().then((querySnapshot) => {
+      grid.innerHTML = '';
+      if (querySnapshot.empty) {
+        grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">কোনো গল্প পাওয়া যায়নি।</p>';
+        return;
+      }
+
+      querySnapshot.forEach((doc) => {
+        const story = doc.data();
+        const card = document.createElement('div');
+        card.className = 'story-card';
+        card.innerHTML = `
+          <div>
+            <h3 class="story-title">${escapeHtml(story.title)}</h3>
+            <div class="story-excerpt">${escapeHtml(story.content)}</div>
+          </div>
+          <div class="story-meta">
+            <span>ক্যাটাগরি: <strong>${story.category || 'সাধারণ'}</strong></span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }).catch(err => {
+      console.error(err);
+      grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">গল্প লোড করতে সমস্যা হয়েছে। Firestore Rules চেক করুন।</p>';
+    });
+  }
+
+  function escapeHtml(text) {
+    return text ? text.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+  }
+</script>
+
 </body>
 </html>

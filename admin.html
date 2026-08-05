@@ -291,6 +291,52 @@
   }
 </script>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAliz-F-qzpblysGFB4Yephlo4hVPz_7Z0",
+    authDomain: "oprokashi-to.firebaseapp.com",
+    projectId: "oprokashi-to",
+    storageBucket: "oprokashi-to.firebasestorage.app",
+    messagingSenderId: "739451365790",
+    appId: "1:739451365790:web:1989b3da7ca6a1eab8be8f",
+    measurementId: "G-B6JZ36V59E"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const storyForm = document.getElementById('storyForm');
+
+  if (storyForm) {
+    storyForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title').value.trim();
+      const category = document.getElementById('category').value;
+      const content = document.getElementById('content').value.trim();
+
+      if (!title || !content) return;
+
+      db.collection("stories").add({
+        title: title,
+        category: category,
+        content: content,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(() => {
+        alert("গল্প সফলভাবে পাবলিশ হয়েছে!");
+        storyForm.reset();
+      })
+      .catch((error) => {
+        alert("ভুল হয়েছে: " + error.message);
+      });
+    });
+  }
+</script>
+
 </body>
 
 </html>
