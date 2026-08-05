@@ -1,63 +1,58 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Noto Sans Bengali", sans-serif;
 }
 
-body{
-    background:#0f172a;
-    color:white;
-    font-family:Arial,sans-serif;
+body {
+    background: #0f0f0f;
+    color: white;
 }
 
-.hero{
-    min-height:100vh;
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
 
-    display:flex;
-    flex-direction:column;
+    background: linear-gradient(
+        rgba(0,0,0,0.7),
+        rgba(0,0,0,0.9)
+    ),
+    url("background.jpg");
 
-    justify-content:center;
-    align-items:center;
-
-    text-align:center;
-
-    padding:20px;
+    background-size: cover;
+    background-position: center;
 }
 
-.hero h1{
-
-    font-size:65px;
-
-    margin-bottom:20px;
+.hero h1 {
+    font-size: 70px;
+    letter-spacing: 5px;
+    margin-bottom: 20px;
 }
 
-.hero p{
-
-    font-size:22px;
-
-    color:#cbd5e1;
-
-    line-height:1.8;
-
-    margin-bottom:40px;
+.hero p {
+    font-size: 22px;
+    line-height: 1.8;
+    color: #ddd;
 }
 
-.btn{
-
-    background:#2563eb;
-
-    color:white;
-
-    padding:15px 35px;
-
-    border-radius:10px;
-
-    text-decoration:none;
-
-    transition:.3s;
+.btn {
+    margin-top: 40px;
+    padding: 15px 40px;
+    background: #ffffff;
+    color: #000;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 18px;
+    transition: 0.3s;
 }
 
-.btn:hover{
-
-    background:#1d4ed8;
+.btn:hover {
+    background: #ffcc00;
+    transform: scale(1.05);
 }
