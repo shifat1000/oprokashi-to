@@ -60,7 +60,7 @@ async function loadHeroBanners() {
       const b = doc.data();
       const slide = document.createElement('div');
       slide.className = `hero-slide ${index === 0 ? 'active' : ''}`;
-      slide.style.backgroundImage = `url('${b.imageUrl || 'assets/images/background.jpg'}')`;
+      slide.style.backgroundImage = `url('${b.imageUrl || 'images/background.jpg'}')`;
       slide.innerHTML = `
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -87,6 +87,11 @@ async function loadLibraryStories() {
     if (!shelfContainer) return;
     shelfContainer.innerHTML = '';
 
+    if (libraryState.stories.length === 0) {
+      shelfContainer.innerHTML = '<p style="text-align:center; padding:50px; color:var(--text-secondary);">কোনো বই পাওয়া যায়নি। এডমিন প্যানেল থেকে নতুন বই যোগ করুন।</p>';
+      return;
+    }
+
     const categories = [...new Set(libraryState.stories.map(s => s.category || 'অন্যান্য'))];
 
     categories.forEach(cat => {
@@ -102,7 +107,7 @@ async function loadLibraryStories() {
           ${filtered.map(story => `
             <div class="book-card" onclick="triggerBookOpen('${story.id}', event)">
               <div class="book-spine"></div>
-              <div class="book-cover" style="background-image: url('${story.coverUrl || 'assets/images/background.jpg'}');"></div>
+              <div class="book-cover" style="background-image: url('${story.coverUrl || 'images/background.jpg'}');"></div>
               <div class="book-pages"></div>
             </div>
           `).join('')}
@@ -117,8 +122,8 @@ async function loadLibraryStories() {
 
 function triggerBookOpen(storyId, event) {
   const targetX = event ? event.clientX : window.innerWidth / 2;
-  if (librarianInstance) {
-    librarianInstance.fetchBookForUser(targetX, () => {
+  if (window.librarianInstance) {
+    window.librarianInstance.fetchBookForUser(targetX, () => {
       window.location.href = `story.html?id=${storyId}`;
     });
   } else {

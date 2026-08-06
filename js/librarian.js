@@ -67,7 +67,7 @@ class LibrarianAvatarEngine {
     this.ctx.arc(0, 0, 16, 0, Math.PI * 2);
     this.ctx.fill();
 
-    // Torso (Coat)
+    // Torso
     this.ctx.fillStyle = '#1e293b';
     this.ctx.fillRect(-12, 16, 24, 34);
 
@@ -82,7 +82,7 @@ class LibrarianAvatarEngine {
     this.ctx.lineTo(6 - legOffset, 68);
     this.ctx.stroke();
 
-    // Book in hand state
+    // Book in hand
     if (this.state === 'FETCHING') {
       this.ctx.fillStyle = '#ef4444';
       this.ctx.fillRect(10, 20, 14, 18);
@@ -98,7 +98,6 @@ class LibrarianAvatarEngine {
   }
 }
 
-let librarianInstance = null;
 document.addEventListener("DOMContentLoaded", () => {
-  librarianInstance = new LibrarianAvatarEngine('librarianCanvas');
+  window.librarianInstance = new LibrarianAvatarEngine('librarianCanvas');
 });

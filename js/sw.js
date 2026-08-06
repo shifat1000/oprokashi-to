@@ -1,13 +1,13 @@
-const CACHE_NAME = 'oprokashi-library-v1';
+const CACHE_NAME = 'oprokashi-library-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/story.html',
-  '/admin.html',
-  '/css/style.css',
-  '/js/app.js',
-  '/js/librarian.js',
-  '/js/pageflip.js'
+  './',
+  './index.html',
+  './story.html',
+  './admin.html',
+  './css/style.css',
+  './js/app.js',
+  './js/librarian.js',
+  './js/pageflip.js'
 ];
 
 self.addEventListener('install', (e) => {
