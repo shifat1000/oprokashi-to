@@ -1,131 +1,212 @@
-import { fetchStories } from './supabase.js';
-
-const storiesGrid = document.getElementById('storiesGrid');
-const searchInput = document.getElementById('searchInput');
-const filterBtns = document.querySelectorAll('.filter-btn');
-const storyModal = document.getElementById('storyModal');
-const modalBody = document.getElementById('modalBody');
-const closeBtn = document.querySelector('.close-btn');
-
-let allStories = [];
-let currentCategory = 'সব';
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadMainStories();
-  setupEvents();
-});
-
-async function loadMainStories() {
-  try {
-    allStories = await fetchStories();
-    renderStories(allStories);
-  } catch (err) {
-    console.error('Error loading stories:', err);
-    storiesGrid.innerHTML = `<p style="color: var(--accent); text-align: center; grid-column: 1/-1;">গল্পসমূহ লোড করা সম্ভব হয়নি। অনুগ্রহ করে পরে চেষ্টা করুন।</p>`;
-  }
-}
-
-function renderStories(stories) {
-  if (!stories || stories.length === 0) {
-    storiesGrid.innerHTML = `<p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">কোনো গল্প পাওয়া যায়নি।</p>`;
-    return;
-  }
-
-  storiesGrid.innerHTML = stories.map(story => {
-    const formattedDate = story.created_at
-      ? new Date(story.created_at).toLocaleDateString('bn-BD')
-      : '';
-    const defaultCover = 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=800&auto=format&fit=crop';
-    const coverUrl = story.image_url || defaultCover;
-    const shortContent = story.content ? story.content.substring(0, 120) + '...' : '';
-
-    return `
-      <div class="story-card" onclick="openStoryModal('${story.id}')">
-        <div class="story-cover-wrapper">
-          <img src="${coverUrl}" alt="${escapeHtml(story.title)}" class="story-cover" onerror="this.src='${defaultCover}'">
-          <span class="story-badge">${escapeHtml(story.category || 'অন্যান্য')}</span>
-        </div>
-        <div class="story-details">
-          <h3 class="story-title">${escapeHtml(story.title || 'শিরোনামহীন')}</h3>
-          <div class="story-meta">
-            ✍️ ${escapeHtml(story.author || 'অপ্রকাশিত')} | 📅 ${formattedDate}
-          </div>
-          <p class="story-excerpt">${escapeHtml(shortContent)}</p>
-          <button class="read-more-btn">পড়ুন →</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function filterAndSearch() {
-  const query = searchInput.value.toLowerCase().trim();
-
-  const filtered = allStories.filter(story => {
-    const matchesCategory = (currentCategory === 'সব') || (story.category === currentCategory);
-    const matchesQuery = (
-      (story.title && story.title.toLowerCase().includes(query)) ||
-      (story.author && story.author.toLowerCase().includes(query)) ||
-      (story.content && story.content.toLowerCase().includes(query))
-    );
-    return matchesCategory && matchesQuery;
-  });
-
-  renderStories(filtered);
-}
-
-window.openStoryModal = function(id) {
-  const story = allStories.find(s => s.id === id);
-  if (!story) return;
-
-  const formattedDate = story.created_at
-    ? new Date(story.created_at).toLocaleDateString('bn-BD')
-    : '';
-
-  modalBody.innerHTML = `
-    ${story.image_url ? `<img src="${story.image_url}" style="width: 100%; max-height: 350px; object-fit: cover; border-radius: 8px; margin-bottom: 1.5rem;">` : ''}
-    <span class="story-badge" style="position: relative; top: 0; left: 0; display: inline-block; margin-bottom: 0.5rem;">${escapeHtml(story.category || 'অন্যান্য')}</span>
-    <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem;">${escapeHtml(story.title)}</h2>
-    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">✍️ ${escapeHtml(story.author)} &nbsp;|&nbsp; 📅 ${formattedDate}</p>
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 1.5rem;">
-    <div style="font-size: 1.1rem; line-height: 1.8; white-space: pre-wrap; color: #e2e8f0;">${escapeHtml(story.content)}</div>
-  `;
-
-  storyModal.style.display = 'block';
-  document.body.style.overflow = 'hidden';
+const firebaseConfig = {
+  apiKey: "AIzaSyAliz-F-qzpblysGFB4Yephlo4hVPz_7Z0",
+  authDomain: "oprokashi-to.firebaseapp.com",
+  projectId: "oprokashi-to",
+  storageBucket: "oprokashi-to.firebasestorage.app",
+  messagingSenderId: "739451365790",
+  appId: "1:739451365790:web:1989b3da7ca6a1eab8be8f",
+  measurementId: "G-B6JZ36V59E"
 };
 
-function setupEvents() {
-  searchInput.addEventListener('input', filterAndSearch);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentCategory = btn.getAttribute('data-category');
-      filterAndSearch();
-    });
-  });
+let libraryState = {
+  stories: [],
+  banners: [],
+  settings: {},
+  audioActive: false,
+  weatherActive: false,
+  forcedTimeMode: null
+};
 
-  closeBtn.addEventListener('click', () => {
-    storyModal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-  });
+document.addEventListener("DOMContentLoaded", async () => {
+  await fetchSystemSettings();
+  await loadHeroBanners();
+  await loadLibraryStories();
+  setupTimeSystem();
+  initWeatherCanvas();
+});
 
-  window.addEventListener('click', (e) => {
-    if (e.target === storyModal) {
-      storyModal.style.display = 'none';
-      document.body.style.overflow = 'auto';
+async function fetchSystemSettings() {
+  try {
+    const doc = await db.collection("settings").doc("site_info").get();
+    if (doc.exists) {
+      libraryState.settings = doc.data();
+      if (libraryState.settings.siteName) {
+        const brandEl = document.getElementById('siteNameDisplay');
+        if (brandEl) brandEl.innerText = libraryState.settings.siteName;
+      }
     }
-  });
+  } catch (e) {
+    console.error("Error fetching settings:", e);
+  }
 }
 
-function escapeHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+async function loadHeroBanners() {
+  try {
+    const snapshot = await db.collection("banners").where("enabled", "==", true).get();
+    const container = document.getElementById('heroSlider');
+    if (!container) return;
+    if (snapshot.empty) {
+      container.style.display = 'none';
+      return;
+    }
+    container.innerHTML = '';
+    let index = 0;
+    snapshot.forEach(doc => {
+      const b = doc.data();
+      const slide = document.createElement('div');
+      slide.className = `hero-slide ${index === 0 ? 'active' : ''}`;
+      slide.style.backgroundImage = `url('${b.imageUrl || 'assets/images/background.jpg'}')`;
+      slide.innerHTML = `
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="hero-title">${b.title}</h1>
+          <p class="hero-subtitle">${b.subtitle || ''}</p>
+          <button class="btn-gold" onclick="triggerBookOpen('${b.storyId}', event)">পড়া শুরু করুন</button>
+        </div>
+      `;
+      container.appendChild(slide);
+      index++;
+    });
+  } catch (e) {
+    console.error("Error loading banners:", e);
+  }
+}
+
+async function loadLibraryStories() {
+  try {
+    const snapshot = await db.collection("stories").orderBy("createdAt", "desc").get();
+    libraryState.stories = [];
+    snapshot.forEach(doc => libraryState.stories.push({ id: doc.id, ...doc.data() }));
+
+    const shelfContainer = document.getElementById('bookshelfShelvesContainer');
+    if (!shelfContainer) return;
+    shelfContainer.innerHTML = '';
+
+    const categories = [...new Set(libraryState.stories.map(s => s.category || 'অন্যান্য'))];
+
+    categories.forEach(cat => {
+      const filtered = libraryState.stories.filter(s => (s.category || 'অন্যান্য') === cat);
+      const section = document.createElement('section');
+      section.className = 'shelf-container';
+      section.innerHTML = `
+        <div class="shelf-title">
+          <span>📖 ${cat} Shelf</span>
+          <small style="font-size: 0.8rem; color: var(--text-secondary);">${filtered.length} টি বই</small>
+        </div>
+        <div class="bookshelf">
+          ${filtered.map(story => `
+            <div class="book-card" onclick="triggerBookOpen('${story.id}', event)">
+              <div class="book-spine"></div>
+              <div class="book-cover" style="background-image: url('${story.coverUrl || 'assets/images/background.jpg'}');"></div>
+              <div class="book-pages"></div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      shelfContainer.appendChild(section);
+    });
+  } catch (e) {
+    console.error("Error loading stories:", e);
+  }
+}
+
+function triggerBookOpen(storyId, event) {
+  const targetX = event ? event.clientX : window.innerWidth / 2;
+  if (librarianInstance) {
+    librarianInstance.fetchBookForUser(targetX, () => {
+      window.location.href = `story.html?id=${storyId}`;
+    });
+  } else {
+    window.location.href = `story.html?id=${storyId}`;
+  }
+}
+
+function setupTimeSystem() {
+  const overlay = document.getElementById('timeOverlay');
+  if (!overlay) return;
+  const hour = new Date().getHours();
+  overlay.className = 'time-overlay';
+
+  const mode = libraryState.forcedTimeMode || (
+    hour >= 5 && hour < 12 ? 'morning' :
+    hour >= 12 && hour < 17 ? 'afternoon' :
+    hour >= 17 && hour < 20 ? 'evening' : 'night'
+  );
+
+  overlay.classList.add(`time-${mode}`);
+}
+
+function cycleTimeMode() {
+  const modes = ['morning', 'afternoon', 'evening', 'night'];
+  let current = modes.indexOf(libraryState.forcedTimeMode) + 1;
+  libraryState.forcedTimeMode = modes[current % modes.length];
+  setupTimeSystem();
+}
+
+function toggleAudioEngine() {
+  const audio = document.getElementById('ambientAudioLoop');
+  if (!audio) return;
+  if (libraryState.audioActive) {
+    audio.pause();
+    libraryState.audioActive = false;
+  } else {
+    audio.play().catch(() => {});
+    libraryState.audioActive = true;
+  }
+}
+
+function initWeatherCanvas() {
+  const canvas = document.getElementById('weatherCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let particles = [];
+  for (let i = 0; i < 70; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      speed: Math.random() * 4 + 2,
+      length: Math.random() * 15 + 10
+    });
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (libraryState.weatherActive) {
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.lineWidth = 1;
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - 2, p.y + p.length);
+        ctx.stroke();
+        p.y += p.speed;
+        if (p.y > canvas.height) p.y = 0;
+      });
+    }
+    requestAnimationFrame(render);
+  }
+  render();
+}
+
+function toggleWeatherEngine() {
+  libraryState.weatherActive = !libraryState.weatherActive;
+}
+
+function handleLiveSearch() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  const cards = document.querySelectorAll('.book-card');
+  libraryState.stories.forEach((story, idx) => {
+    const match = story.title.toLowerCase().includes(query) || (story.author && story.author.toLowerCase().includes(query));
+    if (cards[idx]) {
+      cards[idx].style.display = match ? 'block' : 'none';
+    }
+  });
 }
