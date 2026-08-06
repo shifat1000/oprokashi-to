@@ -1,0 +1,61 @@
+/* ==========================================================================
+   OPROKASHI — DESIGN SYSTEM VARIABLES (Part 02 - Design System & UI/UX)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Hind+Siliguri:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Poppins:wght@400;500;600&display=swap');
+
+:root {
+  /* Color Palette */
+  --bg-primary: #0F172A;
+  --bg-secondary: #111827;
+  --bg-surface: #1E293B;
+  --bg-glass: rgba(255, 255, 255, 0.08);
+  --bg-glass-hover: rgba(255, 255, 255, 0.12);
+  
+  /* Brand Accents */
+  --color-primary: #D4AF37;   /* Luxury Gold */
+  --color-accent: #F59E0B;    /* Warm Amber */
+  --color-success: #22C55E;
+  --color-danger: #EF4444;
+  
+  /* Typography Colors */
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #64748B;
+  
+  /* Borders & Glassmorphism */
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-gold: rgba(212, 175, 55, 0.3);
+  
+  /* Fonts */
+  --font-bengali: 'Hind Siliguri', sans-serif;
+  --font-english: 'Cinzel', serif;
+  --font-reader: 'Merriweather', serif;
+  --font-button: 'Poppins', sans-serif;
+  
+  /* Border Radius */
+  --radius-card: 20px;
+  --radius-btn: 14px;
+  --radius-input: 14px;
+  --radius-modal: 24px;
+  --radius-book: 18px;
+  
+  /* Shadows & Depth */
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 15px 40px rgba(0, 0, 0, 0.5);
+  --shadow-book: -10px 15px 30px rgba(0, 0, 0, 0.7);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glow-gold: 0 0 20px rgba(212, 175, 55, 0.4);
+  
+  /* Library Physics & Dimensions */
+  --bookshelf-height: 280px;
+  --book-width: 140px;
+  --book-height: 210px;
+  --book-depth: 28px;
+  
+  /* Transitions */
+  --transition-fast: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-cinema: 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+}

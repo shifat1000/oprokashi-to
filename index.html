@@ -3,61 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>অপ্রকাশিত — Virtual Library</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="css/style.css">
+  <title>অপ্রকাশিত — Living Virtual Library</title>
   
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/bookshelf.css">
+  
+  <style>
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      margin: 0;
+      font-family: var(--font-bengali);
+    }
+    header.main-header {
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-glass);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-  <!-- Canvas & Lighting Overlays -->
-  <canvas id="libraryBackgroundCanvas"></canvas>
-  <canvas id="weatherCanvas"></canvas>
-  <div id="timeOverlay" class="time-overlay"></div>
 
-  <!-- Header -->
-  <header>
-    <div class="brand-logo" id="siteNameDisplay" onclick="location.reload()">অপ্রকাশিত.</div>
-    <div style="display:flex; gap: 20px; align-items:center;">
-      <input type="text" id="searchInput" placeholder="গল্প বা লেখক খুঁজুন..." onkeyup="handleLiveSearch()" style="background:rgba(0,0,0,0.5); border:1px solid var(--glass-border); color:#fff; padding:8px 16px; border-radius:20px; outline:none;">
-      <div id="userAuthSection">
-        <button class="btn-gold" style="padding: 8px 16px; font-size: 0.85rem;" onclick="location.href='admin.html'">এডমিন প্যানেল</button>
-      </div>
+  <!-- Top Header Navigation -->
+  <header class="main-header">
+    <a href="index.html" class="brand-logo">অপ্রকাশিত.</a>
+    <div>
+      <a href="admin.html" style="color: var(--color-primary); text-decoration: none; font-weight: 600;">অ্যাডমিন প্যানেল</a>
     </div>
   </header>
 
-  <!-- Hero Slider -->
-  <div class="hero-slider-container" id="heroSlider"></div>
+  <!-- Main Dynamic 3D Virtual Library Shelves Area -->
+  <main class="virtual-library-container" id="bookshelfShelvesContainer"></main>
 
-  <!-- Librarian Canvas Avatar Container -->
-  <div style="width: 90%; max-width: 1400px; margin: 0 auto; position: relative;">
-    <canvas id="librarianCanvas" style="position: absolute; top: -140px; pointer-events: none; z-index: 20;"></canvas>
-  </div>
+  <!-- Firebase compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
-  <!-- Dynamic Bookshelves -->
-  <main id="bookshelfShelvesContainer"></main>
+  <!-- Oprokashi Engine Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="js/bookshelf.js"></script>
 
-  <!-- Floating Controls -->
-  <div class="floating-controls">
-    <span class="control-icon" title="Ambient Sound Toggle" onclick="toggleAudioEngine()">🎵</span>
-    <span class="control-icon" title="Time Override System" onclick="cycleTimeMode()">⌛</span>
-    <span class="control-icon" title="Weather Toggle" onclick="toggleWeatherEngine()">🌧️</span>
-  </div>
-
-  <!-- Ambient Audio Track -->
-  <audio id="ambientAudioLoop" loop src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
-
-  <!-- Scripts -->
-  <script src="js/librarian.js"></script>
-  <script src="js/app.js"></script>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').then(reg => console.log('ServiceWorker registered:', reg)).catch(err => console.log('SW error:', err));
-    }
+    document.addEventListener("DOMContentLoaded", () => {
+      // Initialize Bookshelf Renderer on Load
+      if (window.BookshelfEngine) {
+        window.BookshelfEngine.init("bookshelfShelvesContainer");
+      }
+    });
   </script>
 </body>
 </html>

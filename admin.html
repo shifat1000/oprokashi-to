@@ -3,176 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ভার্চুয়াল লাইব্রেরি অ্যাডমিন প্যানেল</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>অপ্রকাশিত — অ্যাডমিন প্যানেল</title>
   
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="admin/css/admin.css">
 </head>
-<body style="padding: 40px 15px; background: #030712;">
+<body class="admin-body">
 
-  <!-- অ্যাডমিন লগইন সেকশন -->
-  <div id="loginSection" style="max-width: 400px; margin: 80px auto; background: var(--glass-bg); padding: 30px; border-radius: 16px; border: 1px solid var(--glass-border); text-align: center;">
-    <h2 style="color: var(--gold-accent); margin-bottom: 20px; font-family: 'Cinzel', serif;">🔐 অ্যাডমিন ভেরিফিকেশন</h2>
-    <input type="email" id="adminEmail" placeholder="অ্যাডমিন ইমেইল" style="width:100%; padding:12px; margin-bottom:12px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
-    <input type="password" id="adminPassword" placeholder="পাসওয়ার্ড" style="width:100%; padding:12px; margin-bottom:20px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
-    <button class="btn-gold" style="width:100%;" onclick="handleAdminLogin()">প্রবেশ করুন</button>
-    <button class="btn-gold" style="width:100%; margin-top:10px; background: transparent; color:#aaa; border:1px solid var(--glass-border);" onclick="location.href='index.html'">হোমপেজে ফিরে যান</button>
+  <div class="admin-wrapper">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="admin-brand">অপ্রকাশিত CMS</div>
+      <ul class="admin-nav">
+        <li class="admin-nav-item active">নতুন গল্প যুক্ত করুন</li>
+        <li class="admin-nav-item" onclick="window.location.href='index.html'">লাইব্রেরি ভিউ</li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+      <!-- Login View -->
+      <section id="loginSection" class="admin-card" style="max-width: 400px; margin: 100px auto; display: none;">
+        <h2 style="color: var(--color-primary); margin-bottom: 20px;">অ্যাডমিন লগইন</h2>
+        <div class="admin-form-group">
+          <label class="admin-label">ইমেইল</label>
+          <input type="email" id="adminEmail" class="admin-input" placeholder="admin@oprokashi.com">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-label">পাসওয়ার্ড</label>
+          <input type="password" id="adminPassword" class="admin-input" placeholder="••••••••">
+        </div>
+        <button class="admin-btn" style="width: 100%;" onclick="AdminController.login(document.getElementById('adminEmail').value, document.getElementById('adminPassword').value)">লগইন করুন</button>
+      </section>
+
+      <!-- Publishing Dashboard View -->
+      <section id="dashboardSection" class="admin-card" style="display: none;">
+        <h2 style="color: var(--color-primary); margin-bottom: 20px;">নতুন গল্প প্রকাশ করুন</h2>
+        <form id="publishStoryForm">
+          <div class="admin-form-group">
+            <label class="admin-label">গল্পের শিরোনাম</label>
+            <input type="text" id="storyTitleInput" class="admin-input" placeholder="গল্পের নাম লিখুন..." required>
+          </div>
+
+          <div style="display: flex; gap: 20px;">
+            <div class="admin-form-group" style="flex: 1;">
+              <label class="admin-label">লেখকের নাম</label>
+              <input type="text" id="storyAuthorInput" class="admin-input" placeholder="লেখকের নাম...">
+            </div>
+            <div class="admin-form-group" style="flex: 1;">
+              <label class="admin-label">ক্যাটাগরি / সেলফ</label>
+              <select id="storyCategorySelect" class="admin-select">
+                <option value="জনপ্রিয়">জনপ্রিয়</option>
+                <option value="রহস্য ও থ্রিলার">রহস্য ও থ্রিলার</option>
+                <option value="রোমান্স">রোমান্স</option>
+                <option value="ইসলামিক">ইসলামিক</option>
+                <option value="সাই-ফাই">সাই-ফাই</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">বুক কভার ইমেজ (Upload Image)</label>
+            <input type="file" id="storyCoverFileInput" class="admin-input" accept="image/*">
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">গল্পের বিষয়বস্তু / অধ্যায়</label>
+            <textarea id="storyContentInput" class="admin-textarea" rows="12" placeholder="সম্পূর্ণ গল্প বা প্রথম অধ্যায় এখানে লিখুন..." required></textarea>
+          </div>
+
+          <button type="submit" class="admin-btn">গল্প প্রকাশ করুন</button>
+        </form>
+      </section>
+    </main>
   </div>
 
-  <!-- সংরক্ষিত অ্যাডমিন ড্যাশবোর্ড -->
-  <div id="adminDashboard" style="display: none; max-width: 1000px; margin: 0 auto; background: var(--glass-bg); padding: 30px; border-radius: 16px; border: 1px solid var(--glass-border);">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
-      <h1 style="color: var(--gold-accent); font-family: 'Cinzel', serif; font-size:1.5rem;">🛠️ মাস্টার ভার্চুয়াল লাইব্রেরি অ্যাডমিন কন্ট্রোল</h1>
-      <div>
-        <button class="btn-gold" style="margin-right:8px;" onclick="location.href='index.html'">হোমপেজ</button>
-        <button class="btn-gold" style="background:#ef4444; color:#fff;" onclick="handleAdminLogout()">লগআউট</button>
-      </div>
-    </div>
+  <!-- Firebase Compatibility SDK (v10.8.0) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
-    <!-- ১. আবহাওয়া ও পরিবেশ নিয়ন্ত্রণ -->
-    <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px;">
-      <h3 style="color:#fff; margin-bottom:15px;">🌐 পরিবেশ ও সময় নির্ধারণ</h3>
-      <label style="color:#aaa; display:block; margin-bottom: 6px;">লাইব্রেরির ডিফল্ট সময় সেট করুন:</label>
-      <select id="adminTimeSelect" style="width:100%; padding:10px; margin-bottom:15px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
-        <option value="AUTO">স্বয়ংক্রিয় (ব্যবহারকারীর স্থানীয় সময় অনুযায়ী)</option>
-        <option value="morning">সকাল (সূর্যোদয়ের আলো)</option>
-        <option value="afternoon">দুপুর (উজ্জ্বল আলো)</option>
-        <option value="evening">সন্ধ্যা (গোধূলি আলো)</option>
-        <option value="night">রাত (জোছনা ও ওয়ার্ম ল্যাম্পের আলো)</option>
-      </select>
-      <button class="btn-gold" onclick="saveAtmosphereSettings()">আবহাওয়ার সেটিংস সংরক্ষণ করুন</button>
-    </div>
-
-    <!-- ২. গল্প বা বই প্রকাশনা -->
-    <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px;">
-      <h3 style="color:#fff; margin-bottom:15px;">📖 গল্প প্রকাশ ও ৩ডি বুকশেলফ পরিচালনা</h3>
-      <input type="hidden" id="adminStoryId">
-      <label style="color:#aaa; display:block; margin-bottom: 4px;">বইয়ের শিরোনাম:</label>
-      <input type="text" id="adminTitle" placeholder="বই বা গল্পের নাম লিখুন" style="width:100%; padding:10px; margin-bottom:12px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
-      
-      <label style="color:#aaa; display:block; margin-bottom: 4px;">লেখকের নাম:</label>
-      <input type="text" id="adminAuthor" placeholder="লেখকের নাম লিখুন" style="width:100%; padding:10px; margin-bottom:12px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
-      
-      <label style="color:#aaa; display:block; margin-bottom: 4px;">ক্যাটাগরি / বুকশেলফ নির্বাচন করুন:</label>
-      <select id="adminCategory" style="width:100%; padding:10px; margin-bottom:12px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
-        <option value="Trending">ট্রেন্ডিং সেলফ</option>
-        <option value="Romance">রোমান্স সেলফ</option>
-        <option value="Horror">হরর সেলফ</option>
-        <option value="Mystery">রহস্য ও থ্রিলার সেলফ</option>
-        <option value="Islamic">ইসলামিক সেলফ</option>
-        <option value="Sci-Fi">সাইন্স ফিকশন সেলফ</option>
-      </select>
-
-      <label style="color:#aaa; display:block; margin-bottom: 4px;">কভার ফটো (ফাইল আপলোড করুন):</label>
-      <input type="file" id="adminCoverFile" accept="image/*" style="margin-bottom:15px; color:#fff; display:block;">
-
-      <label style="color:#aaa; display:block; margin-bottom: 4px;">সম্পূর্ণ গল্প / বিবরণ:</label>
-      <textarea id="adminContent" rows="6" placeholder="এখানে সম্পূর্ণ গল্প বা বইয়ের বিষয়বস্তু লিখুন..." style="width:100%; padding:10px; background:#1e293b; color:#fff; border:none; border-radius:6px; margin-bottom:15px; outline:none;"></textarea>
-      
-      <button class="btn-gold" id="saveStoryBtn" onclick="saveAdminStory()">পাবলিশ / আপডেট করুন</button>
-    </div>
-  </div>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyAliz-F-qzpblysGFB4Yephlo4hVPz_7Z0",
-      authDomain: "oprokashi-to.firebaseapp.com",
-      projectId: "oprokashi-to",
-      storageBucket: "oprokashi-to.firebasestorage.app",
-      messagingSenderId: "739451365790",
-      appId: "1:739451365790:web:1989b3da7ca6a1eab8be8f",
-      measurementId: "G-B6JZ36V59E"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-
-    // অ্যাডমিন লগইন স্ট্যাটাস চেক
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('adminDashboard').style.display = 'block';
-      } else {
-        document.getElementById('loginSection').style.display = 'block';
-        document.getElementById('adminDashboard').style.display = 'none';
-      }
-    });
-
-    async function handleAdminLogin() {
-      const email = document.getElementById('adminEmail').value;
-      const pass = document.getElementById('adminPassword').value;
-      try {
-        await auth.signInWithEmailAndPassword(email, pass);
-      } catch (err) {
-        alert("লগইন ব্যর্থ হয়েছে: " + err.message);
-      }
-    }
-
-    function handleAdminLogout() {
-      auth.signOut();
-    }
-
-    async function saveAtmosphereSettings() {
-      const mode = document.getElementById('adminTimeSelect').value;
-      try {
-        await db.collection("settings").doc("site_info").set({ defaultTimeMode: mode }, { merge: true });
-        alert("পরিবেশ সেটিংস সফলভাবে সংরক্ষণ করা হয়েছে!");
-      } catch (err) {
-        alert("ত্রুটি: " + err.message);
-      }
-    }
-
-    async function saveAdminStory() {
-      const id = document.getElementById('adminStoryId').value;
-      const title = document.getElementById('adminTitle').value;
-      const author = document.getElementById('adminAuthor').value;
-      const category = document.getElementById('adminCategory').value;
-      const content = document.getElementById('adminContent').value;
-      const file = document.getElementById('adminCoverFile').files[0];
-      const btn = document.getElementById('saveStoryBtn');
-
-      if (!title || !content) return alert("শিরোনাম এবং কন্টেন্ট দেওয়া আবশ্যক!");
-
-      btn.disabled = true;
-      btn.innerText = "পাবলিশ হচ্ছে...";
-
-      try {
-        let coverUrl = '';
-        if (file) {
-          const ref = storage.ref(`covers/${Date.now()}_${file.name}`);
-          await ref.put(file);
-          coverUrl = await ref.getDownloadURL();
-        }
-
-        const data = {
-          title,
-          author,
-          category,
-          content,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        };
-        if (coverUrl) data.coverUrl = coverUrl;
-
-        if (id) {
-          await db.collection("stories").doc(id).update(data);
-        } else {
-          data.views = 0;
-          await db.collection("stories").add(data);
-        }
-        alert("গল্পটি সফলভাবে লাইব্রেরিতে যুক্ত হয়েছে!");
-        location.reload();
-      } catch (err) {
-        alert("ত্রুটি: " + err.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "পাবলিশ / আপডেট করুন";
-      }
-    }
-  </script>
+  <!-- Oprokashi Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="admin/js/admin.js"></script>
 </body>
 </html>
