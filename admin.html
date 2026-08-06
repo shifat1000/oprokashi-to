@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>এডমিন কন্ট্রোল — অপ্রকাশিত</title>
+  <title>প্রিমিয়াম এডমিন কন্ট্রোল — অপ্রকাশিত</title>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -18,15 +18,23 @@
     body {
       font-family: 'Hind Siliguri', sans-serif;
       background-color: var(--bg-dark); color: var(--text-main);
-      padding: 30px 15px; display: flex; justify-content: center;
+      padding: 30px 15px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 100vh;
     }
+    
+    .login-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 30px; max-width: 400px; width: 100%; text-align: center;
+    }
+
+    #adminPanel { display: none; width: 100%; max-width: 800px; }
+
     .admin-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 16px; padding: 25px; max-width: 650px; width: 100%;
-      margin-bottom: 20px;
+      border-radius: 16px; padding: 25px; width: 100%; margin-bottom: 25px;
     }
-    h2 { color: var(--accent-color); margin-bottom: 20px; font-size: 1.4rem; }
-    label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: var(--text-muted); }
+    h2 { color: var(--accent-color); margin-bottom: 20px; font-size: 1.3rem; }
+    label { display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--text-muted); }
     input, select, textarea {
       width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.4);
       border: 1px solid var(--card-border); border-radius: 8px;
@@ -38,24 +46,39 @@
     }
     .list-item {
       display: flex; justify-content: space-between; align-items: center;
-      background: rgba(0,0,0,0.3); padding: 10px 15px; border-radius: 8px;
+      background: rgba(0,0,0,0.3); padding: 12px 15px; border-radius: 8px;
       margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05);
     }
-    .btn-danger { background: #ef4444; color: #fff; padding: 5px 10px; font-size: 0.8rem; }
+    .btn-danger { background: #ef4444; color: #fff; padding: 6px 12px; font-size: 0.8rem; }
   </style>
 </head>
 <body>
 
-  <div style="width: 100%; max-width: 650px;">
+  <!-- Admin Login -->
+  <div class="login-card" id="loginCard">
+    <h2 style="margin-bottom: 10px;">🔒 এডমিন অ্যাক্সেস</h2>
+    <input type="password" id="adminPassInput" placeholder="পাসওয়ার্ড লিখুন..." onkeypress="if(event.key==='Enter') checkAdminPassword()">
+    <button onclick="checkAdminPassword()" style="width: 100%;">প্রবেশ করুন</button>
+  </div>
+
+  <!-- Admin Panel Dashboard -->
+  <div id="adminPanel">
     
-    <!-- 1. Post Story -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h2>🛠️ মাস্টার এডমিন ড্যাশবোর্ড</h2>
+      <button onclick="logoutAdmin()" style="background:#ef4444; color:#fff;">লগআউট</button>
+    </div>
+
+    <!-- 1. Post/Edit Story -->
     <div class="admin-card">
-      <h2>✍️ গল্প পোস্ট / এডিট করুন</h2>
+      <h2>✍️ নতুন গল্প / উপন্যাস পাবলিশ ও কভার ইউআরএল</h2>
       <input type="hidden" id="editStoryId">
-      <label>শিরোনাম:</label>
-      <input type="text" id="titleInput" placeholder="গল্পের শিরোনাম">
-      <label>লেখক:</label>
-      <input type="text" id="authorInput" placeholder="লেখকের নাম">
+      <label>গল্পের শিরোনাম:</label>
+      <input type="text" id="titleInput" placeholder="শিরোনাম">
+      <label>লেখকের নাম:</label>
+      <input type="text" id="authorInput" placeholder="লেখক">
+      <label>কভার ছবির URL (ইচ্ছাধীন):</label>
+      <input type="url" id="coverUrlInput" placeholder="https://image-link.com/cover.jpg">
       <label>ক্যাটাগরি:</label>
       <select id="categorySelect">
         <option value="রোমান্টিক">রোমান্টিক</option>
@@ -64,24 +87,42 @@
         <option value="জীবনমুখী">জীবনমুখী</option>
         <option value="অন্যান্য">অন্যান্য</option>
       </select>
-      <label>মূল গল্প:</label>
-      <textarea id="contentInput" rows="6" placeholder="সম্পূর্ণ গল্প লিখুন..."></textarea>
+      <label>সম্পূর্ণ গল্প / চ্যাপ্টার কন্টেন্ট:</label>
+      <textarea id="contentInput" rows="8" placeholder="সম্পূর্ণ উপন্যাস বা গল্পের কন্টেন্ট লিখুন..."></textarea>
       <button onclick="saveStory()">পাবলিশ করুন</button>
     </div>
 
-    <!-- 2. Manage Info / Contact -->
+    <!-- 2. Hero Slider Control -->
     <div class="admin-card">
-      <h2>⚙️ আমাদের সম্পর্কে ও কন্টাক্ট লিঙ্ক সেটিং</h2>
+      <h2>🖼️ হোমপেজ হিরো ব্যানার ম্যানেজার</h2>
+      <label>ব্যানার টাইটেল:</label>
+      <input type="text" id="bannerTitle" placeholder="ব্যানারের শিরোনাম">
+      <label>সাবটাইটেল / বর্ণনা:</label>
+      <input type="text" id="bannerSubtitle" placeholder="ছোট বর্ণনা">
+      <label>ব্যাকগ্রাউন্ড ইমেজ URL:</label>
+      <input type="url" id="bannerImage" placeholder="https://image-link.com/banner.jpg">
+      <label>কানেক্টেড গল্প সিলেক্ট করুন:</label>
+      <select id="bannerStorySelect"></select>
+      <button onclick="saveBanner()">নতুন ব্যানার যোগ করুন</button>
+      
+      <div id="bannersList" style="margin-top:15px;"></div>
+    </div>
+
+    <!-- 3. Site Settings -->
+    <div class="admin-card">
+      <h2>⚙️ ওয়েবসাইট ইনফো ও কন্টাক্ট সেটিংস</h2>
+      <label>সাইট নেম / ব্র্যান্ড নেম:</label>
+      <input type="text" id="siteNameInput" placeholder="অপ্রকাশিত.">
       <label>আমাদের সম্পর্কে (About Text):</label>
-      <textarea id="aboutTextInput" rows="3" placeholder="আমাদের সম্পর্কে তথ্য লিখুন..."></textarea>
-      <label>যোগাযোগ / গল্প পাঠানোর ফেসবুক লিংক:</label>
-      <input type="url" id="contactUrlInput" placeholder="https://facebook.com/...">
+      <textarea id="aboutTextInput" rows="3"></textarea>
+      <label>কন্টাক্ট / ফেসবুক পেজ লিংক:</label>
+      <input type="url" id="contactUrlInput">
       <button onclick="saveSettings()">সেটিং সেভ করুন</button>
     </div>
 
-    <!-- 3. Stories List -->
+    <!-- 4. Stories List -->
     <div class="admin-card">
-      <h2>📚 প্রকাশিত গল্প ম্যানেজমেন্ট</h2>
+      <h2>📚 প্রকাশিত উপন্যাস ও গল্প লিস্ট</h2>
       <div id="adminStoriesList">লোড হচ্ছে...</div>
     </div>
 
@@ -90,6 +131,36 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <script>
+    const CORRECT_PASS = "12344321";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (sessionStorage.getItem("adminAuthorized") === "true") {
+        showAdminPanel();
+      }
+    });
+
+    function checkAdminPassword() {
+      if (document.getElementById('adminPassInput').value === CORRECT_PASS) {
+        sessionStorage.setItem("adminAuthorized", "true");
+        showAdminPanel();
+      } else {
+        alert("ভুল পাসওয়ার্ড!");
+      }
+    }
+
+    function showAdminPanel() {
+      document.getElementById('loginCard').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      loadAdminStories();
+      loadSettings();
+      loadAdminBanners();
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem("adminAuthorized");
+      window.location.reload();
+    }
+
     const firebaseConfig = {
       apiKey: "AIzaSyAliz-F-qzpblysGFB4Yephlo4hVPz_7Z0",
       authDomain: "oprokashi-to.firebaseapp.com",
@@ -102,36 +173,31 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    document.addEventListener("DOMContentLoaded", () => {
-      loadAdminStories();
-      loadSettings();
-    });
-
     function saveStory() {
       const id = document.getElementById('editStoryId').value;
       const title = document.getElementById('titleInput').value;
       const author = document.getElementById('authorInput').value;
+      const coverUrl = document.getElementById('coverUrlInput').value;
       const category = document.getElementById('categorySelect').value;
       const content = document.getElementById('contentInput').value;
 
       if(!title || !content) return alert("শিরোনাম ও মূল গল্প আবশ্যক!");
 
       const storyData = {
-        title, author, category, content,
+        title, author, coverUrl, category, content,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
 
       if(id) {
         db.collection("stories").doc(id).update(storyData).then(() => {
-          alert("গল্প আপডেট হয়েছে!");
-          resetForm();
-          loadAdminStories();
+          alert("আপডেট সফল হয়েছে!");
+          resetForm(); loadAdminStories();
         });
       } else {
+        storyData.views = 0;
         db.collection("stories").add(storyData).then(() => {
-          alert("নতুন গল্প পাবলিশ হয়েছে!");
-          resetForm();
-          loadAdminStories();
+          alert("পাবলিশ সম্পন্ন হয়েছে!");
+          resetForm(); loadAdminStories();
         });
       }
     }
@@ -139,17 +205,26 @@
     function loadAdminStories() {
       db.collection("stories").orderBy("createdAt", "desc").get().then((querySnapshot) => {
         const list = document.getElementById('adminStoriesList');
-        list.innerHTML = '';
+        const select = document.getElementById('bannerStorySelect');
+        list.innerHTML = ''; select.innerHTML = '';
+        
         querySnapshot.forEach((doc) => {
           const data = doc.data();
+          
+          // Select Box for Banners
+          const opt = document.createElement('option');
+          opt.value = doc.id; opt.innerText = data.title;
+          select.appendChild(opt);
+
+          // Admin List Item
           const div = document.createElement('div');
           div.className = 'list-item';
           div.innerHTML = `
             <div>
-              <strong>${data.title}</strong> <small>(${data.author})</small>
+              <strong>${data.title}</strong> <small>(${data.author || 'N/A'})</small>
             </div>
             <div>
-              <button onclick="editStory('${doc.id}', '${escapeQuotes(data.title)}', '${escapeQuotes(data.author)}', '${data.category}', '${escapeQuotes(data.content)}')">এডিট</button>
+              <button onclick="editStory('${doc.id}', '${escapeQuotes(data.title)}', '${escapeQuotes(data.author)}', '${escapeQuotes(data.coverUrl)}', '${data.category}', '${escapeQuotes(data.content)}')">এডিট</button>
               <button class="btn-danger" onclick="deleteStory('${doc.id}')">ডিলিট</button>
             </div>
           `;
@@ -158,49 +233,88 @@
       });
     }
 
-    function editStory(id, title, author, category, content) {
-      document.getElementById('editStoryId').value = id;
-      document.getElementById('titleInput').value = title;
-      document.getElementById('authorInput').value = author;
-      document.getElementById('categorySelect').value = category;
-      document.getElementById('contentInput').value = content;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    function saveBanner() {
+      const title = document.getElementById('bannerTitle').value;
+      const subtitle = document.getElementById('bannerSubtitle').value;
+      const imageUrl = document.getElementById('bannerImage').value;
+      const storyId = document.getElementById('bannerStorySelect').value;
+
+      if(!title || !storyId) return alert("ব্যানার টাইটেল ও গল্প সিলেক্ট করুন!");
+
+      db.collection("banners").add({
+        title, subtitle, imageUrl, storyId, enabled: true,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert("ব্যানার যুক্ত করা হয়েছে!");
+        loadAdminBanners();
+      });
     }
 
-    function deleteStory(id) {
-      if(confirm("সত্যিই ডিলিট করতে চান?")) {
-        db.collection("stories").doc(id).delete().then(() => {
-          alert("ডিলিট হয়েছে!");
-          loadAdminStories();
+    function loadAdminBanners() {
+      db.collection("banners").get().then((snapshot) => {
+        const list = document.getElementById('bannersList');
+        list.innerHTML = '';
+        snapshot.forEach((doc) => {
+          const b = doc.data();
+          const div = document.createElement('div');
+          div.className = 'list-item';
+          div.innerHTML = `
+            <div><strong>${b.title}</strong></div>
+            <button class="btn-danger" onclick="deleteBanner('${doc.id}')">ডিলিট</button>
+          `;
+          list.appendChild(div);
         });
+      });
+    }
+
+    function deleteBanner(id) {
+      if(confirm("ব্যানারটি মুছে ফেলতে চান?")) {
+        db.collection("banners").doc(id).delete().then(() => loadAdminBanners());
       }
     }
 
     function saveSettings() {
+      const siteName = document.getElementById('siteNameInput').value;
       const aboutText = document.getElementById('aboutTextInput').value;
       const contactUrl = document.getElementById('contactUrlInput').value;
 
       db.collection("settings").doc("site_info").set({
-        aboutText, contactUrl
-      }).then(() => {
-        alert("সেটিং সেভ হয়েছে!");
-      });
+        siteName, aboutText, contactUrl
+      }).then(() => alert("সেটিংস সেভ হয়েছে!"));
     }
 
     function loadSettings() {
       db.collection("settings").doc("site_info").get().then((doc) => {
         if(doc.exists) {
           const data = doc.data();
+          document.getElementById('siteNameInput').value = data.siteName || '';
           document.getElementById('aboutTextInput').value = data.aboutText || '';
           document.getElementById('contactUrlInput').value = data.contactUrl || '';
         }
       });
     }
 
+    function editStory(id, title, author, coverUrl, category, content) {
+      document.getElementById('editStoryId').value = id;
+      document.getElementById('titleInput').value = title;
+      document.getElementById('authorInput').value = author;
+      document.getElementById('coverUrlInput').value = coverUrl !== 'undefined' ? coverUrl : '';
+      document.getElementById('categorySelect').value = category;
+      document.getElementById('contentInput').value = content;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deleteStory(id) {
+      if(confirm("ডিলিট করতে চান?")) {
+        db.collection("stories").doc(id).delete().then(() => loadAdminStories());
+      }
+    }
+
     function resetForm() {
       document.getElementById('editStoryId').value = '';
       document.getElementById('titleInput').value = '';
       document.getElementById('authorInput').value = '';
+      document.getElementById('coverUrlInput').value = '';
       document.getElementById('contentInput').value = '';
     }
 
