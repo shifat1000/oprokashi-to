@@ -40,9 +40,18 @@
       border: 1px solid var(--card-border); border-radius: 8px;
       color: #fff; margin-bottom: 15px; outline: none; font-family: inherit;
     }
+    input[type="file"] {
+      padding: 8px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+    }
     button {
       background: var(--accent-color); color: #000; border: none;
       padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
     .list-item {
       display: flex; justify-content: space-between; align-items: center;
@@ -50,6 +59,7 @@
       margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05);
     }
     .btn-danger { background: #ef4444; color: #fff; padding: 6px 12px; font-size: 0.8rem; }
+    .upload-status { font-size: 0.8rem; color: var(--accent-color); margin-top: -10px; margin-bottom: 15px; }
   </style>
 </head>
 <body>
@@ -71,14 +81,18 @@
 
     <!-- 1. Post/Edit Story -->
     <div class="admin-card">
-      <h2>✍️ নতুন গল্প / উপন্যাস পাবলিশ ও কভার ইউআরএল</h2>
+      <h2>✍️ নতুন গল্প / উপন্যাস পাবলিশ ও কভার ফটো আপলোড</h2>
       <input type="hidden" id="editStoryId">
+      <input type="hidden" id="existingCoverUrl">
       <label>গল্পের শিরোনাম:</label>
       <input type="text" id="titleInput" placeholder="শিরোনাম">
       <label>লেখকের নাম:</label>
       <input type="text" id="authorInput" placeholder="লেখক">
-      <label>কভার ছবির URL (ইচ্ছাধীন):</label>
-      <input type="url" id="coverUrlInput" placeholder="https://image-link.com/cover.jpg">
+      
+      <label>কভার ফটো সিলেক্ট করুন (Direct Upload):</label>
+      <input type="file" id="coverFileInput" accept="image/*">
+      <div id="coverUploadStatus" class="upload-status"></div>
+
       <label>ক্যাটাগরি:</label>
       <select id="categorySelect">
         <option value="রোমান্টিক">রোমান্টিক</option>
@@ -89,7 +103,7 @@
       </select>
       <label>সম্পূর্ণ গল্প / চ্যাপ্টার কন্টেন্ট:</label>
       <textarea id="contentInput" rows="8" placeholder="সম্পূর্ণ উপন্যাস বা গল্পের কন্টেন্ট লিখুন..."></textarea>
-      <button onclick="saveStory()">পাবলিশ করুন</button>
+      <button id="saveStoryBtn" onclick="saveStory()">পাবলিশ করুন</button>
     </div>
 
     <!-- 2. Hero Slider Control -->
@@ -99,11 +113,14 @@
       <input type="text" id="bannerTitle" placeholder="ব্যানারের শিরোনাম">
       <label>সাবটাইটেল / বর্ণনা:</label>
       <input type="text" id="bannerSubtitle" placeholder="ছোট বর্ণনা">
-      <label>ব্যাকগ্রাউন্ড ইমেজ URL:</label>
-      <input type="url" id="bannerImage" placeholder="https://image-link.com/banner.jpg">
+      
+      <label>ব্যাকগ্রাউন্ড ফটো সিলেক্ট করুন (Direct Upload):</label>
+      <input type="file" id="bannerFileInput" accept="image/*">
+      <div id="bannerUploadStatus" class="upload-status"></div>
+
       <label>কানেক্টেড গল্প সিলেক্ট করুন:</label>
       <select id="bannerStorySelect"></select>
-      <button onclick="saveBanner()">নতুন ব্যানার যোগ করুন</button>
+      <button id="saveBannerBtn" onclick="saveBanner()">নতুন ব্যানার যোগ করুন</button>
       
       <div id="bannersList" style="margin-top:15px;"></div>
     </div>
@@ -130,6 +147,8 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  
   <script>
     const CORRECT_PASS = "12344321";
 
@@ -161,6 +180,7 @@
       window.location.reload();
     }
 
+    /* Firebase Config */
     const firebaseConfig = {
       apiKey: "AIzaSyAliz-F-qzpblysGFB4Yephlo4hVPz_7Z0",
       authDomain: "oprokashi-to.firebaseapp.com",
@@ -172,33 +192,59 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    const storage = firebase.storage();
 
-    function saveStory() {
+    // Helper: Upload file to Firebase Storage
+    async function uploadImageFile(file, folder) {
+      const fileName = `${folder}/${Date.now()}_${file.name}`;
+      const ref = storage.ref().child(fileName);
+      await ref.put(file);
+      return await ref.getDownloadURL();
+    }
+
+    async function saveStory() {
       const id = document.getElementById('editStoryId').value;
       const title = document.getElementById('titleInput').value;
       const author = document.getElementById('authorInput').value;
-      const coverUrl = document.getElementById('coverUrlInput').value;
       const category = document.getElementById('categorySelect').value;
       const content = document.getElementById('contentInput').value;
+      const fileInput = document.getElementById('coverFileInput');
+      const saveBtn = document.getElementById('saveStoryBtn');
+      const statusDiv = document.getElementById('coverUploadStatus');
 
       if(!title || !content) return alert("শিরোনাম ও মূল গল্প আবশ্যক!");
 
-      const storyData = {
-        title, author, coverUrl, category, content,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
+      saveBtn.disabled = true;
+      let coverUrl = document.getElementById('existingCoverUrl').value || '';
 
-      if(id) {
-        db.collection("stories").doc(id).update(storyData).then(() => {
+      try {
+        if(fileInput.files.length > 0) {
+          statusDiv.innerText = "ছবি আপলোড হচ্ছে...";
+          coverUrl = await uploadImageFile(fileInput.files[0], "covers");
+          statusDiv.innerText = "ছবি আপলোড সম্পন্ন!";
+        }
+
+        const storyData = {
+          title, author, coverUrl, category, content,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        if(id) {
+          await db.collection("stories").doc(id).update(storyData);
           alert("আপডেট সফল হয়েছে!");
-          resetForm(); loadAdminStories();
-        });
-      } else {
-        storyData.views = 0;
-        db.collection("stories").add(storyData).then(() => {
+        } else {
+          storyData.views = 0;
+          await db.collection("stories").add(storyData);
           alert("পাবলিশ সম্পন্ন হয়েছে!");
-          resetForm(); loadAdminStories();
-        });
+        }
+
+        resetForm(); 
+        loadAdminStories();
+      } catch (err) {
+        alert("সমস্যা হয়েছে: " + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        statusDiv.innerText = "";
       }
     }
 
@@ -211,12 +257,10 @@
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           
-          // Select Box for Banners
           const opt = document.createElement('option');
           opt.value = doc.id; opt.innerText = data.title;
           select.appendChild(opt);
 
-          // Admin List Item
           const div = document.createElement('div');
           div.className = 'list-item';
           div.innerHTML = `
@@ -233,21 +277,42 @@
       });
     }
 
-    function saveBanner() {
+    async function saveBanner() {
       const title = document.getElementById('bannerTitle').value;
       const subtitle = document.getElementById('bannerSubtitle').value;
-      const imageUrl = document.getElementById('bannerImage').value;
       const storyId = document.getElementById('bannerStorySelect').value;
+      const fileInput = document.getElementById('bannerFileInput');
+      const saveBtn = document.getElementById('saveBannerBtn');
+      const statusDiv = document.getElementById('bannerUploadStatus');
 
       if(!title || !storyId) return alert("ব্যানার টাইটেল ও গল্প সিলেক্ট করুন!");
 
-      db.collection("banners").add({
-        title, subtitle, imageUrl, storyId, enabled: true,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
+      saveBtn.disabled = true;
+      let imageUrl = '';
+
+      try {
+        if(fileInput.files.length > 0) {
+          statusDiv.innerText = "ছবি আপলোড হচ্ছে...";
+          imageUrl = await uploadImageFile(fileInput.files[0], "banners");
+          statusDiv.innerText = "ছবি আপলোড সম্পন্ন!";
+        }
+
+        await db.collection("banners").add({
+          title, subtitle, imageUrl, storyId, enabled: true,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
         alert("ব্যানার যুক্ত করা হয়েছে!");
+        document.getElementById('bannerTitle').value = '';
+        document.getElementById('bannerSubtitle').value = '';
+        fileInput.value = '';
         loadAdminBanners();
-      });
+      } catch (err) {
+        alert("সমস্যা হয়েছে: " + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        statusDiv.innerText = "";
+      }
     }
 
     function loadAdminBanners() {
@@ -296,9 +361,9 @@
 
     function editStory(id, title, author, coverUrl, category, content) {
       document.getElementById('editStoryId').value = id;
+      document.getElementById('existingCoverUrl').value = coverUrl !== 'undefined' ? coverUrl : '';
       document.getElementById('titleInput').value = title;
       document.getElementById('authorInput').value = author;
-      document.getElementById('coverUrlInput').value = coverUrl !== 'undefined' ? coverUrl : '';
       document.getElementById('categorySelect').value = category;
       document.getElementById('contentInput').value = content;
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -312,9 +377,10 @@
 
     function resetForm() {
       document.getElementById('editStoryId').value = '';
+      document.getElementById('existingCoverUrl').value = '';
       document.getElementById('titleInput').value = '';
       document.getElementById('authorInput').value = '';
-      document.getElementById('coverUrlInput').value = '';
+      document.getElementById('coverFileInput').value = '';
       document.getElementById('contentInput').value = '';
     }
 
