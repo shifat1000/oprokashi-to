@@ -3,61 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Master Virtual Library Admin Controller</title>
+  <title>ভার্চুয়াল লাইব্রেরি অ্যাডমিন প্যানেল</title>
   <link rel="stylesheet" href="css/style.css">
   
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 </head>
 <body style="padding: 40px 15px; background: #030712;">
 
-  <div style="max-width: 1000px; margin: 0 auto; background: var(--glass-bg); padding: 30px; border-radius: 16px; border: 1px solid var(--glass-border);">
+  <!-- অ্যাডমিন লগইন সেকশন -->
+  <div id="loginSection" style="max-width: 400px; margin: 80px auto; background: var(--glass-bg); padding: 30px; border-radius: 16px; border: 1px solid var(--glass-border); text-align: center;">
+    <h2 style="color: var(--gold-accent); margin-bottom: 20px; font-family: 'Cinzel', serif;">🔐 অ্যাডমিন ভেরিফিকেশন</h2>
+    <input type="email" id="adminEmail" placeholder="অ্যাডমিন ইমেইল" style="width:100%; padding:12px; margin-bottom:12px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
+    <input type="password" id="adminPassword" placeholder="পাসওয়ার্ড" style="width:100%; padding:12px; margin-bottom:20px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
+    <button class="btn-gold" style="width:100%;" onclick="handleAdminLogin()">প্রবেশ করুন</button>
+    <button class="btn-gold" style="width:100%; margin-top:10px; background: transparent; color:#aaa; border:1px solid var(--glass-border);" onclick="location.href='index.html'">হোমপেজে ফিরে যান</button>
+  </div>
+
+  <!-- সংরক্ষিত অ্যাডমিন ড্যাশবোর্ড -->
+  <div id="adminDashboard" style="display: none; max-width: 1000px; margin: 0 auto; background: var(--glass-bg); padding: 30px; border-radius: 16px; border: 1px solid var(--glass-border);">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
-      <h1 style="color: var(--gold-accent); font-family: 'Cinzel', serif;">🛠️ Master Virtual Library Administration</h1>
-      <button class="btn-gold" onclick="location.href='index.html'">হোমপেজে ফেরত</button>
+      <h1 style="color: var(--gold-accent); font-family: 'Cinzel', serif; font-size:1.5rem;">🛠️ মাস্টার ভার্চুয়াল লাইব্রেরি অ্যাডমিন কন্ট্রোল</h1>
+      <div>
+        <button class="btn-gold" style="margin-right:8px;" onclick="location.href='index.html'">হোমপেজ</button>
+        <button class="btn-gold" style="background:#ef4444; color:#fff;" onclick="handleAdminLogout()">লগআউট</button>
+      </div>
     </div>
 
-    <!-- 1. Ambient & Atmospheric Control -->
+    <!-- ১. আবহাওয়া ও পরিবেশ নিয়ন্ত্রণ -->
     <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px;">
-      <h3 style="color:#fff; margin-bottom:15px;">🌐 Ambient & Atmosphere Control</h3>
-      <label style="color:#aaa; display:block; margin-bottom: 6px;">Library Default Time Override:</label>
+      <h3 style="color:#fff; margin-bottom:15px;">🌐 পরিবেশ ও সময় নির্ধারণ</h3>
+      <label style="color:#aaa; display:block; margin-bottom: 6px;">লাইব্রেরির ডিফল্ট সময় সেট করুন:</label>
       <select id="adminTimeSelect" style="width:100%; padding:10px; margin-bottom:15px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
-        <option value="AUTO">Automatic (Real Local Time)</option>
-        <option value="morning">Morning (Sunlight)</option>
-        <option value="afternoon">Afternoon (Bright)</option>
-        <option value="evening">Evening (Golden Hour)</option>
-        <option value="night">Night (Moonlight & Warm Lamps)</option>
+        <option value="AUTO">স্বয়ংক্রিয় (ব্যবহারকারীর স্থানীয় সময় অনুযায়ী)</option>
+        <option value="morning">সকাল (সূর্যোদয়ের আলো)</option>
+        <option value="afternoon">দুপুর (উজ্জ্বল আলো)</option>
+        <option value="evening">সন্ধ্যা (গোধূলি আলো)</option>
+        <option value="night">রাত (জোছনা ও ওয়ার্ম ল্যাম্পের আলো)</option>
       </select>
-      <button class="btn-gold" onclick="saveAtmosphereSettings()">Save Atmosphere Settings</button>
+      <button class="btn-gold" onclick="saveAtmosphereSettings()">আবহাওয়ার সেটিংস সংরক্ষণ করুন</button>
     </div>
 
-    <!-- 2. Story Publisher & Shelf Asset Manager -->
+    <!-- ২. গল্প বা বই প্রকাশনা -->
     <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px;">
-      <h3 style="color:#fff; margin-bottom:15px;">📖 Publisher & 3D Bookshelf Asset Manager</h3>
+      <h3 style="color:#fff; margin-bottom:15px;">📖 গল্প প্রকাশ ও ৩ডি বুকশেলফ পরিচালনা</h3>
       <input type="hidden" id="adminStoryId">
-      <label style="color:#aaa; display:block; margin-bottom: 4px;">শিরোনাম:</label>
-      <input type="text" id="adminTitle" placeholder="বইয়ের শিরোনাম" style="width:100%; padding:10px; margin-bottom:12px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
+      <label style="color:#aaa; display:block; margin-bottom: 4px;">বইয়ের শিরোনাম:</label>
+      <input type="text" id="adminTitle" placeholder="বই বা গল্পের নাম লিখুন" style="width:100%; padding:10px; margin-bottom:12px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
       
-      <label style="color:#aaa; display:block; margin-bottom: 4px;">লেখক:</label>
-      <input type="text" id="adminAuthor" placeholder="লেখকের নাম" style="width:100%; padding:10px; margin-bottom:12px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
+      <label style="color:#aaa; display:block; margin-bottom: 4px;">লেখকের নাম:</label>
+      <input type="text" id="adminAuthor" placeholder="লেখকের নাম লিখুন" style="width:100%; padding:10px; margin-bottom:12px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
       
-      <label style="color:#aaa; display:block; margin-bottom: 4px;">ক্যাটাগরি / বুকশেলফ:</label>
+      <label style="color:#aaa; display:block; margin-bottom: 4px;">ক্যাটাগরি / বুকশেলফ নির্বাচন করুন:</label>
       <select id="adminCategory" style="width:100%; padding:10px; margin-bottom:12px; background:#1e293b; color:#fff; border:none; border-radius:6px; outline:none;">
-        <option value="Trending">Trending Shelf</option>
-        <option value="Romance">Romance Shelf</option>
-        <option value="Horror">Horror Shelf</option>
-        <option value="Mystery">Mystery Shelf</option>
-        <option value="Islamic">Islamic Shelf</option>
-        <option value="Sci-Fi">Sci-Fi Shelf</option>
+        <option value="Trending">ট্রেন্ডিং সেলফ</option>
+        <option value="Romance">রোমান্স সেলফ</option>
+        <option value="Horror">হরর সেলফ</option>
+        <option value="Mystery">রহস্য ও থ্রিলার সেলফ</option>
+        <option value="Islamic">ইসলামিক সেলফ</option>
+        <option value="Sci-Fi">সাইন্স ফিকশন সেলফ</option>
       </select>
 
-      <label style="color:#aaa; display:block; margin-bottom: 4px;">কভার ফটো (Direct Upload):</label>
+      <label style="color:#aaa; display:block; margin-bottom: 4px;">কভার ফটো (ফাইল আপলোড করুন):</label>
       <input type="file" id="adminCoverFile" accept="image/*" style="margin-bottom:15px; color:#fff; display:block;">
 
-      <label style="color:#aaa; display:block; margin-bottom: 4px;">সম্পূর্ণ কন্টেন্ট:</label>
-      <textarea id="adminContent" rows="6" placeholder="গল্প বা উপন্যাস লিখুন..." style="width:100%; padding:10px; background:#1e293b; color:#fff; border:none; border-radius:6px; margin-bottom:15px; outline:none;"></textarea>
+      <label style="color:#aaa; display:block; margin-bottom: 4px;">সম্পূর্ণ গল্প / বিবরণ:</label>
+      <textarea id="adminContent" rows="6" placeholder="এখানে সম্পূর্ণ গল্প বা বইয়ের বিষয়বস্তু লিখুন..." style="width:100%; padding:10px; background:#1e293b; color:#fff; border:none; border-radius:6px; margin-bottom:15px; outline:none;"></textarea>
       
       <button class="btn-gold" id="saveStoryBtn" onclick="saveAdminStory()">পাবলিশ / আপডেট করুন</button>
     </div>
@@ -74,16 +88,42 @@
       measurementId: "G-B6JZ36V59E"
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
+
+    // অ্যাডমিন লগইন স্ট্যাটাস চেক
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+      } else {
+        document.getElementById('loginSection').style.display = 'block';
+        document.getElementById('adminDashboard').style.display = 'none';
+      }
+    });
+
+    async function handleAdminLogin() {
+      const email = document.getElementById('adminEmail').value;
+      const pass = document.getElementById('adminPassword').value;
+      try {
+        await auth.signInWithEmailAndPassword(email, pass);
+      } catch (err) {
+        alert("লগইন ব্যর্থ হয়েছে: " + err.message);
+      }
+    }
+
+    function handleAdminLogout() {
+      auth.signOut();
+    }
 
     async function saveAtmosphereSettings() {
       const mode = document.getElementById('adminTimeSelect').value;
       try {
         await db.collection("settings").doc("site_info").set({ defaultTimeMode: mode }, { merge: true });
-        alert("Atmosphere saved!");
+        alert("পরিবেশ সেটিংস সফলভাবে সংরক্ষণ করা হয়েছে!");
       } catch (err) {
-        alert("Error: " + err.message);
+        alert("ত্রুটি: " + err.message);
       }
     }
 
@@ -96,10 +136,10 @@
       const file = document.getElementById('adminCoverFile').files[0];
       const btn = document.getElementById('saveStoryBtn');
 
-      if (!title || !content) return alert("শিরোনাম এবং কন্টেন্ট আবশ্যক!");
+      if (!title || !content) return alert("শিরোনাম এবং কন্টেন্ট দেওয়া আবশ্যক!");
 
       btn.disabled = true;
-      btn.innerText = "প্রসেস হচ্ছে...";
+      btn.innerText = "পাবলিশ হচ্ছে...";
 
       try {
         let coverUrl = '';
@@ -124,7 +164,7 @@
           data.views = 0;
           await db.collection("stories").add(data);
         }
-        alert("সফলভাবে সেভ হয়েছে!");
+        alert("গল্পটি সফলভাবে লাইব্রেরিতে যুক্ত হয়েছে!");
         location.reload();
       } catch (err) {
         alert("ত্রুটি: " + err.message);
