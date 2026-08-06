@@ -3,22 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>এডমিন কন্ট্রোল প্যানেল — অপ্রকাশিত</title>
-  <link rel="icon" href="data:,">
+  <title>এডমিন কন্ট্রোল — অপ্রকাশিত</title>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --bg-dark: #0a0c10;
-      --card-bg: rgba(22, 27, 34, 0.75);
-      --card-border: rgba(255, 255, 255, 0.08);
+      --bg-dark: #07090e;
+      --card-bg: rgba(18, 24, 38, 0.85);
+      --card-border: rgba(88, 166, 255, 0.15);
       --text-main: #f0f6fc;
       --text-muted: #8b949e;
       --accent-color: #58a6ff;
-      --accent-glow: rgba(88, 166, 255, 0.25);
       --danger-color: #f85149;
-      --danger-glow: rgba(248, 81, 73, 0.25);
-      --gradient-accent: linear-gradient(135deg, #a5d6ff 0%, #58a6ff 50%, #1f6beb 100%);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,204 +23,73 @@
       font-family: 'Hind Siliguri', sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-main);
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow-x: hidden;
       padding: 40px 20px;
+      min-height: 100vh;
     }
 
-    /* Animated Background Effect */
-    .bg-gradient {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      background: 
-        radial-gradient(circle at 15% 20%, rgba(88, 166, 255, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 85% 70%, rgba(165, 214, 255, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(13, 17, 23, 1) 0%, var(--bg-dark) 100%);
-      animation: pulseBg 12s ease-in-out infinite alternate;
-    }
+    .container { max-width: 800px; margin: 0 auto; }
 
-    @keyframes pulseBg {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.05); }
-    }
-
-    .container { max-width: 800px; margin: 0 auto; width: 100%; }
-
-    /* Glass Cards */
-    .login-box, .admin-box {
+    .card {
       background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 35px;
-      margin-bottom: 30px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      animation: fadeInUp 0.6s ease-out;
-    }
-
-    .admin-box { display: none; }
-
-    h2 {
+      border-radius: 16px;
+      padding: 30px;
       margin-bottom: 25px;
-      font-size: 1.8rem;
-      background: var(--gradient-accent);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
 
-    .form-group { margin-bottom: 20px; }
+    h2 { color: var(--accent-color); margin-bottom: 20px; }
+    .form-group { margin-bottom: 18px; }
 
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: var(--text-main);
-    }
-
+    label { display: block; margin-bottom: 6px; color: var(--text-main); }
     input, select, textarea {
-      width: 100%;
-      padding: 14px;
-      background: rgba(13, 17, 23, 0.6);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      color: var(--text-main);
-      font-size: 1rem;
-      font-family: inherit;
-      outline: none;
-      transition: all 0.3s ease;
+      width: 100%; padding: 12px; background: rgba(0,0,0,0.4);
+      border: 1px solid var(--card-border); border-radius: 8px;
+      color: var(--text-main); font-family: inherit; outline: none;
     }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 15px var(--accent-glow);
-    }
-
-    .btn-group { display: flex; gap: 12px; }
 
     button {
-      padding: 12px 24px;
-      background: var(--accent-color);
-      color: #000;
-      font-weight: 700;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      font-family: inherit;
+      padding: 12px 24px; background: var(--accent-color);
+      color: #000; font-weight: 700; border: none; border-radius: 8px;
+      cursor: pointer; font-family: inherit; margin-right: 10px;
     }
 
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
+    .btn-cancel { background: rgba(255,255,255,0.1); color: var(--text-main); display: none; }
 
-    .btn-cancel {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--text-main);
-      display: none;
-    }
-
-    .btn-cancel:hover {
-      background: rgba(255, 255, 255, 0.2);
-      box-shadow: none;
-    }
-
-    /* Story List Item */
     .story-item {
-      background: rgba(13, 17, 23, 0.5);
-      border: 1px solid var(--card-border);
-      padding: 18px;
-      border-radius: 12px;
-      margin-bottom: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: all 0.3s ease;
+      background: rgba(0,0,0,0.3); border: 1px solid var(--card-border);
+      padding: 16px; border-radius: 10px; margin-bottom: 12px;
+      display: flex; justify-content: space-between; align-items: center;
     }
 
-    .story-item:hover {
-      border-color: rgba(88, 166, 255, 0.3);
-      transform: translateX(4px);
-    }
-
-    .story-info h4 { font-size: 1.15rem; color: var(--text-main); margin-bottom: 4px; }
-    .story-info p { font-size: 0.88rem; color: var(--text-muted); }
-
-    .story-actions { display: flex; gap: 10px; }
-
-    .btn-edit {
-      background: rgba(88, 166, 255, 0.15);
-      color: var(--accent-color);
-      border: 1px solid rgba(88, 166, 255, 0.3);
-      padding: 8px 14px;
-      font-size: 0.88rem;
-    }
-
-    .btn-delete {
-      background: rgba(248, 81, 73, 0.15);
-      color: var(--danger-color);
-      border: 1px solid rgba(248, 81, 73, 0.3);
-      padding: 8px 14px;
-      font-size: 0.88rem;
-    }
-
-    .btn-delete:hover {
-      background: var(--danger-color);
-      color: #fff;
-      box-shadow: 0 0 15px var(--danger-glow);
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .btn-edit { background: rgba(88, 166, 255, 0.2); color: var(--accent-color); padding: 6px 12px; font-size: 0.85rem;}
+    .btn-delete { background: rgba(248, 81, 73, 0.2); color: var(--danger-color); padding: 6px 12px; font-size: 0.85rem;}
   </style>
 </head>
 <body>
 
-  <!-- Dynamic Gradient Background -->
-  <div class="bg-gradient"></div>
-
   <div class="container">
-    <!-- Login Box -->
-    <div class="login-box" id="loginBox">
+    <div class="card" id="loginBox">
       <h2>🔐 এডমিন লগইন</h2>
       <div class="form-group">
-        <label>সিক্রেট পিন / পাসওয়ার্ড:</label>
-        <input type="password" id="adminPin" placeholder="পাসওয়ার্ড লিখুন">
+        <label>পাসওয়ার্ড:</label>
+        <input type="password" id="adminPin">
       </div>
       <button onclick="checkAccess()">প্রবেশ করুন</button>
     </div>
 
-    <!-- Admin Box -->
-    <div class="admin-box" id="adminBox">
-      <h2 id="formTitle">✍️ নতুন গল্প পোস্ট করুন</h2>
+    <div class="card" id="adminBox" style="display:none;">
+      <h2 id="formTitle">✍️ পোস্ট বা এডিট করুন</h2>
       <form id="storyForm">
         <input type="hidden" id="editStoryId">
-        
         <div class="form-group">
-          <label>গল্পের শিরোনাম:</label>
-          <input type="text" id="title" placeholder="শিরোনাম দিন..." required>
+          <label>শিরোনাম:</label>
+          <input type="text" id="title" required>
         </div>
-
         <div class="form-group">
-          <label>লেখকের নাম:</label>
-          <input type="text" id="author" placeholder="লেখকের নাম লিখুন (যেমন: শাফায়েত)" required>
+          <label>লেখক:</label>
+          <input type="text" id="author" required>
         </div>
-
         <div class="form-group">
           <label>ক্যাটাগরি:</label>
           <select id="category">
@@ -235,22 +100,16 @@
             <option value="অন্যান্য">অন্যান্য</option>
           </select>
         </div>
-
         <div class="form-group">
-          <label>গল্পের বিবরণ:</label>
-          <textarea id="content" rows="8" placeholder="গল্পের মূল অংশ লিখুন..." required></textarea>
+          <label>মূল গল্প:</label>
+          <textarea id="content" rows="6" required></textarea>
         </div>
-
-        <div class="btn-group">
-          <button type="submit" id="submitBtn">পাবলিশ করুন</button>
-          <button type="button" class="btn-cancel" id="cancelBtn" onclick="resetForm()">বাতিল করুন</button>
-        </div>
+        <button type="submit" id="submitBtn">পাবলিশ করুন</button>
+        <button type="button" class="btn-cancel" id="cancelBtn" onclick="resetForm()">বাতিল</button>
       </form>
 
-      <h2 style="margin-top: 45px;">📚 সকল প্রকাশিত গল্পসমূহ</h2>
-      <div id="adminStoriesList">
-        <p style="color: var(--text-muted);">গল্প লোড হচ্ছে...</p>
-      </div>
+      <h2 style="margin-top:35px;">📚 সকল পোস্ট এডমিন কন্ট্রোল</h2>
+      <div id="adminStoriesList"></div>
     </div>
   </div>
 
@@ -265,9 +124,7 @@
         document.getElementById('loginBox').style.display = 'none';
         document.getElementById('adminBox').style.display = 'block';
         loadAdminStories();
-      } else {
-        alert("ভুল পাসওয়ার্ড!");
-      }
+      } else { alert("ভুল পাসওয়ার্ড!"); }
     }
 
     const firebaseConfig = {
@@ -276,8 +133,7 @@
       projectId: "oprokashi-to",
       storageBucket: "oprokashi-to.firebasestorage.app",
       messagingSenderId: "739451365790",
-      appId: "1:739451365790:web:1989b3da7ca6a1eab8be8f",
-      measurementId: "G-B6JZ36V59E"
+      appId: "1:739451365790:web:1989b3da7ca6a1eab8be8f"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -286,28 +142,24 @@
     document.getElementById('storyForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const editId = document.getElementById('editStoryId').value;
-      const title = document.getElementById('title').value.trim();
-      const author = document.getElementById('author').value.trim();
-      const category = document.getElementById('category').value;
-      const content = document.getElementById('content').value.trim();
-
       const data = {
-        title, author, category, content,
+        title: document.getElementById('title').value.trim(),
+        author: document.getElementById('author').value.trim(),
+        category: document.getElementById('category').value,
+        content: document.getElementById('content').value.trim(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       };
 
       if (editId) {
         db.collection("stories").doc(editId).update(data).then(() => {
-          alert("গল্প সফলভাবে এডিট হয়েছে!");
-          resetForm();
-          loadAdminStories();
+          alert("তথ্য সফলভাবে এডিট হয়েছে!");
+          resetForm(); loadAdminStories();
         });
       } else {
         data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
         db.collection("stories").add(data).then(() => {
-          alert("গল্প সফলভাবে পোস্ট হয়েছে!");
-          resetForm();
-          loadAdminStories();
+          alert("নতুন গল্প পাবলিশ করা হয়েছে!");
+          resetForm(); loadAdminStories();
         });
       }
     });
@@ -316,21 +168,17 @@
       const list = document.getElementById('adminStoriesList');
       db.collection("stories").orderBy("createdAt", "desc").get().then((snapshot) => {
         list.innerHTML = '';
-        if(snapshot.empty) {
-          list.innerHTML = '<p style="color:var(--text-muted)">কোনো গল্প পাওয়া যায়নি।</p>';
-          return;
-        }
         snapshot.forEach(doc => {
           const item = doc.data();
           const div = document.createElement('div');
           div.className = 'story-item';
           div.innerHTML = `
-            <div class="story-info">
+            <div>
               <h4>${escapeHtml(item.title)}</h4>
-              <p>লেখক: ${escapeHtml(item.author || 'অজানা')} | ক্যাটাগরি: ${escapeHtml(item.category)}</p>
+              <p style="font-size:0.85rem; color:var(--text-muted)">লেখক: ${escapeHtml(item.author)} | ক্যাটাগরি: ${escapeHtml(item.category)}</p>
             </div>
-            <div class="story-actions">
-              <button class="btn-edit" onclick="editStory('${doc.id}', '${escapeQuote(item.title)}', '${escapeQuote(item.author || '')}', '${item.category}', '${escapeQuote(item.content)}')">এডিট</button>
+            <div>
+              <button class="btn-edit" onclick="editStory('${doc.id}', '${escapeQuote(item.title)}', '${escapeQuote(item.author)}', '${item.category}', '${escapeQuote(item.content)}')">এডিট</button>
               <button class="btn-delete" onclick="deleteStory('${doc.id}')">ডিলিট</button>
             </div>
           `;
@@ -346,16 +194,16 @@
       document.getElementById('category').value = category;
       document.getElementById('content').value = content;
       
-      document.getElementById('formTitle').innerText = "✏️ গল্প এডিট করুন";
-      document.getElementById('submitBtn').innerText = "আপডেট করুন";
+      document.getElementById('formTitle').innerText = "✏️ গল্প আপডেট করুন";
+      document.getElementById('submitBtn').innerText = "আপডেট";
       document.getElementById('cancelBtn').style.display = "inline-block";
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function deleteStory(id) {
-      if (confirm("আপনি কি নিশ্চিত যে গল্পটি মুছে ফেলতে চান?")) {
+      if (confirm("আপনি কি নিশ্চিত এটি মুছে ফেলতে চান?")) {
         db.collection("stories").doc(id).delete().then(() => {
-          alert("গল্পটি মুছে ফেলা হয়েছে।");
+          alert("সফলভাবে ডিলিট করা হয়েছে!");
           loadAdminStories();
         });
       }
@@ -364,7 +212,7 @@
     function resetForm() {
       document.getElementById('storyForm').reset();
       document.getElementById('editStoryId').value = '';
-      document.getElementById('formTitle').innerText = "✍️ নতুন গল্প পোস্ট করুন";
+      document.getElementById('formTitle').innerText = "✍️ পোস্ট বা এডিট করুন";
       document.getElementById('submitBtn').innerText = "পাবলিশ করুন";
       document.getElementById('cancelBtn').style.display = "none";
     }
