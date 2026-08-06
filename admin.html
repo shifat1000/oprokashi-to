@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>এডমিন কন্ট্রোল — অপ্রকাশিত</title>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
   <style>
     :root {
       --bg-dark: #030712;
@@ -14,198 +13,144 @@
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
       --accent-color: #38bdf8;
-      --danger-color: #f85149;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Hind Siliguri', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      padding: 30px 20px;
-      min-height: 100vh;
+      background-color: var(--bg-dark); color: var(--text-main);
+      padding: 30px 15px; display: flex; justify-content: center;
     }
-
-    .container { max-width: 850px; margin: 0 auto; }
-
-    .admin-nav {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
+    .admin-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 25px; max-width: 650px; width: 100%;
+      margin-bottom: 20px;
     }
-
-    .nav-btn {
-      background: var(--card-bg);
-      color: var(--text-main);
-      border: 1px solid var(--card-border);
-      padding: 10px 18px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: all 0.3s;
-    }
-
-    .nav-btn:hover { background: var(--accent-color); color: #000; }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 30px;
-      margin-bottom: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-
-    h2 { color: var(--accent-color); margin-bottom: 20px; }
-    .form-group { margin-bottom: 18px; }
-
-    label { display: block; margin-bottom: 6px; color: var(--text-main); }
+    h2 { color: var(--accent-color); margin-bottom: 20px; font-size: 1.4rem; }
+    label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: var(--text-muted); }
     input, select, textarea {
-      width: 100%; padding: 12px; background: rgba(0,0,0,0.4);
+      width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.4);
       border: 1px solid var(--card-border); border-radius: 8px;
-      color: var(--text-main); font-family: inherit; outline: none;
+      color: #fff; margin-bottom: 15px; outline: none; font-family: inherit;
     }
-
     button {
-      padding: 12px 24px; background: var(--accent-color);
-      color: #000; font-weight: 700; border: none; border-radius: 8px;
-      cursor: pointer; font-family: inherit; margin-right: 10px;
+      background: var(--accent-color); color: #000; border: none;
+      padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
     }
-
-    .btn-cancel { background: rgba(255,255,255,0.1); color: var(--text-main); display: none; }
-
-    .story-item {
-      background: rgba(0,0,0,0.3); border: 1px solid var(--card-border);
-      padding: 16px; border-radius: 10px; margin-bottom: 12px;
+    .list-item {
       display: flex; justify-content: space-between; align-items: center;
+      background: rgba(0,0,0,0.3); padding: 10px 15px; border-radius: 8px;
+      margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05);
     }
-
-    .btn-edit { background: rgba(56, 189, 248, 0.2); color: var(--accent-color); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem;}
-    .btn-delete { background: rgba(248, 81, 73, 0.2); color: var(--danger-color); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem;}
+    .btn-danger { background: #ef4444; color: #fff; padding: 5px 10px; font-size: 0.8rem; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="admin-nav">
-      <a href="index.html" class="nav-btn">🏠 মূল ওয়েবসাইট দেখুন</a>
-      <a href="https://www.facebook.com/share/1EESsM3gDj/" target="_blank" class="nav-btn">✉️ গল্প জমা রিকুয়েস্ট (ফেসবুক পেজ)</a>
+  <div style="width: 100%; max-width: 650px;">
+    
+    <!-- 1. Post Story -->
+    <div class="admin-card">
+      <h2>✍️ গল্প পোস্ট / এডিট করুন</h2>
+      <input type="hidden" id="editStoryId">
+      <label>শিরোনাম:</label>
+      <input type="text" id="titleInput" placeholder="গল্পের শিরোনাম">
+      <label>লেখক:</label>
+      <input type="text" id="authorInput" placeholder="লেখকের নাম">
+      <label>ক্যাটাগরি:</label>
+      <select id="categorySelect">
+        <option value="রোমান্টিক">রোমান্টিক</option>
+        <option value="থ্রিলার">থ্রিলার</option>
+        <option value="হরর">হরর</option>
+        <option value="জীবনমুখী">জীবনমুখী</option>
+        <option value="অন্যান্য">অন্যান্য</option>
+      </select>
+      <label>মূল গল্প:</label>
+      <textarea id="contentInput" rows="6" placeholder="সম্পূর্ণ গল্প লিখুন..."></textarea>
+      <button onclick="saveStory()">পাবলিশ করুন</button>
     </div>
 
-    <div class="card" id="loginBox">
-      <h2>🔐 এডমিন লগইন</h2>
-      <div class="form-group">
-        <label>পাসওয়ার্ড:</label>
-        <input type="password" id="adminPin">
-      </div>
-      <button onclick="checkAccess()">প্রবেশ করুন</button>
+    <!-- 2. Manage Info / Contact -->
+    <div class="admin-card">
+      <h2>⚙️ আমাদের সম্পর্কে ও কন্টাক্ট লিঙ্ক সেটিং</h2>
+      <label>আমাদের সম্পর্কে (About Text):</label>
+      <textarea id="aboutTextInput" rows="3" placeholder="আমাদের সম্পর্কে তথ্য লিখুন..."></textarea>
+      <label>যোগাযোগ / গল্প পাঠানোর ফেসবুক লিংক:</label>
+      <input type="url" id="contactUrlInput" placeholder="https://facebook.com/...">
+      <button onclick="saveSettings()">সেটিং সেভ করুন</button>
     </div>
 
-    <div class="card" id="adminBox" style="display:none;">
-      <h2 id="formTitle">✍️ গল্প পোস্ট বা এডিট করুন</h2>
-      <form id="storyForm">
-        <input type="hidden" id="editStoryId">
-        <div class="form-group">
-          <label>শিরোনাম:</label>
-          <input type="text" id="title" required>
-        </div>
-        <div class="form-group">
-          <label>লেখক:</label>
-          <input type="text" id="author" required>
-        </div>
-        <div class="form-group">
-          <label>ক্যাটাগরি:</label>
-          <select id="category">
-            <option value="রোমান্টিক">রোমান্টিক</option>
-            <option value="থ্রিলার">থ্রিলার</option>
-            <option value="হরর">হরর</option>
-            <option value="জীবনমুখী">জীবনমুখী</option>
-            <option value="অন্যান্য">অন্যান্য</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>মূল গল্প:</label>
-          <textarea id="content" rows="6" required></textarea>
-        </div>
-        <button type="submit" id="submitBtn">পাবলিশ করুন</button>
-        <button type="button" class="btn-cancel" id="cancelBtn" onclick="resetForm()">বাতিল</button>
-      </form>
-
-      <h2 style="margin-top:35px;">📚 প্রকাশিত গল্প ম্যানেজমেন্ট</h2>
-      <div id="adminStoriesList"></div>
+    <!-- 3. Stories List -->
+    <div class="admin-card">
+      <h2>📚 প্রকাশিত গল্প ম্যানেজমেন্ট</h2>
+      <div id="adminStoriesList">লোড হচ্ছে...</div>
     </div>
+
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
   <script>
-    const SECRET_PIN = "123456"; 
-
-    function checkAccess() {
-      if (document.getElementById('adminPin').value === SECRET_PIN) {
-        document.getElementById('loginBox').style.display = 'none';
-        document.getElementById('adminBox').style.display = 'block';
-        loadAdminStories();
-      } else { alert("ভুল পাসওয়ার্ড!"); }
-    }
-
     const firebaseConfig = {
       apiKey: "AIzaSyAliz-F-qzpblysGFB4Yephlo4hVPz_7Z0",
       authDomain: "oprokashi-to.firebaseapp.com",
       projectId: "oprokashi-to",
       storageBucket: "oprokashi-to.firebasestorage.app",
       messagingSenderId: "739451365790",
-      appId: "1:739451365790:web:1989b3da7ca6a1eab8be8f"
+      appId: "1:739451365790:web:1989b3da7ca6a1eab8be8f",
+      measurementId: "G-B6JZ36V59E"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    document.getElementById('storyForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const editId = document.getElementById('editStoryId').value;
-      const data = {
-        title: document.getElementById('title').value.trim(),
-        author: document.getElementById('author').value.trim(),
-        category: document.getElementById('category').value,
-        content: document.getElementById('content').value.trim(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
-
-      if (editId) {
-        db.collection("stories").doc(editId).update(data).then(() => {
-          alert("তথ্য সফলভাবে এডিট হয়েছে!");
-          resetForm(); loadAdminStories();
-        });
-      } else {
-        data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-        db.collection("stories").add(data).then(() => {
-          alert("নতুন গল্প পাবলিশ করা হয়েছে!");
-          resetForm(); loadAdminStories();
-        });
-      }
+    document.addEventListener("DOMContentLoaded", () => {
+      loadAdminStories();
+      loadSettings();
     });
 
+    function saveStory() {
+      const id = document.getElementById('editStoryId').value;
+      const title = document.getElementById('titleInput').value;
+      const author = document.getElementById('authorInput').value;
+      const category = document.getElementById('categorySelect').value;
+      const content = document.getElementById('contentInput').value;
+
+      if(!title || !content) return alert("শিরোনাম ও মূল গল্প আবশ্যক!");
+
+      const storyData = {
+        title, author, category, content,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      if(id) {
+        db.collection("stories").doc(id).update(storyData).then(() => {
+          alert("গল্প আপডেট হয়েছে!");
+          resetForm();
+          loadAdminStories();
+        });
+      } else {
+        db.collection("stories").add(storyData).then(() => {
+          alert("নতুন গল্প পাবলিশ হয়েছে!");
+          resetForm();
+          loadAdminStories();
+        });
+      }
+    }
+
     function loadAdminStories() {
-      const list = document.getElementById('adminStoriesList');
-      db.collection("stories").orderBy("createdAt", "desc").get().then((snapshot) => {
+      db.collection("stories").orderBy("createdAt", "desc").get().then((querySnapshot) => {
+        const list = document.getElementById('adminStoriesList');
         list.innerHTML = '';
-        snapshot.forEach(doc => {
-          const item = doc.data();
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
           const div = document.createElement('div');
-          div.className = 'story-item';
+          div.className = 'list-item';
           div.innerHTML = `
             <div>
-              <h4>${escapeHtml(item.title)}</h4>
-              <p style="font-size:0.85rem; color:var(--text-muted)">লেখক: ${escapeHtml(item.author)} | ক্যাটাগরি: ${escapeHtml(item.category)}</p>
+              <strong>${data.title}</strong> <small>(${data.author})</small>
             </div>
             <div>
-              <button class="btn-edit" onclick="editStory('${doc.id}', '${escapeQuote(item.title)}', '${escapeQuote(item.author)}', '${item.category}', '${escapeQuote(item.content)}')">এডিট</button>
-              <button class="btn-delete" onclick="deleteStory('${doc.id}')">ডিলিট</button>
+              <button onclick="editStory('${doc.id}', '${escapeQuotes(data.title)}', '${escapeQuotes(data.author)}', '${data.category}', '${escapeQuotes(data.content)}')">এডিট</button>
+              <button class="btn-danger" onclick="deleteStory('${doc.id}')">ডিলিট</button>
             </div>
           `;
           list.appendChild(div);
@@ -215,36 +160,53 @@
 
     function editStory(id, title, author, category, content) {
       document.getElementById('editStoryId').value = id;
-      document.getElementById('title').value = title;
-      document.getElementById('author').value = author;
-      document.getElementById('category').value = category;
-      document.getElementById('content').value = content;
-      
-      document.getElementById('formTitle').innerText = "✏️ গল্প আপডেট করুন";
-      document.getElementById('submitBtn').innerText = "আপডেট";
-      document.getElementById('cancelBtn').style.display = "inline-block";
+      document.getElementById('titleInput').value = title;
+      document.getElementById('authorInput').value = author;
+      document.getElementById('categorySelect').value = category;
+      document.getElementById('contentInput').value = content;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function deleteStory(id) {
-      if (confirm("আপনি কি নিশ্চিত এটি মুছে ফেলতে চান?")) {
+      if(confirm("সত্যিই ডিলিট করতে চান?")) {
         db.collection("stories").doc(id).delete().then(() => {
-          alert("সফলভাবে ডিলিট করা হয়েছে!");
+          alert("ডিলিট হয়েছে!");
           loadAdminStories();
         });
       }
     }
 
-    function resetForm() {
-      document.getElementById('storyForm').reset();
-      document.getElementById('editStoryId').value = '';
-      document.getElementById('formTitle').innerText = "✍️ পোস্ট বা এডিট করুন";
-      document.getElementById('submitBtn').innerText = "পাবলিশ করুন";
-      document.getElementById('cancelBtn').style.display = "none";
+    function saveSettings() {
+      const aboutText = document.getElementById('aboutTextInput').value;
+      const contactUrl = document.getElementById('contactUrlInput').value;
+
+      db.collection("settings").doc("site_info").set({
+        aboutText, contactUrl
+      }).then(() => {
+        alert("সেটিং সেভ হয়েছে!");
+      });
     }
 
-    function escapeHtml(text) { return text ? text.replace(/</g, "&lt;").replace(/>/g, "&gt;") : ''; }
-    function escapeQuote(text) { return text ? text.replace(/'/g, "\\'").replace(/\n/g, "\\n") : ''; }
+    function loadSettings() {
+      db.collection("settings").doc("site_info").get().then((doc) => {
+        if(doc.exists) {
+          const data = doc.data();
+          document.getElementById('aboutTextInput').value = data.aboutText || '';
+          document.getElementById('contactUrlInput').value = data.contactUrl || '';
+        }
+      });
+    }
+
+    function resetForm() {
+      document.getElementById('editStoryId').value = '';
+      document.getElementById('titleInput').value = '';
+      document.getElementById('authorInput').value = '';
+      document.getElementById('contentInput').value = '';
+    }
+
+    function escapeQuotes(str) {
+      return str ? str.replace(/'/g, "\\'").replace(/\n/g, "\\n") : '';
+    }
   </script>
 </body>
 </html>
