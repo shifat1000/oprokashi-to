@@ -47,7 +47,7 @@
 
     .container { max-width: 1050px; margin: 0 auto; padding: 0 20px; width: 100%; }
 
-    /* Minimal Top Navigation */
+    /* Top Navigation */
     .navbar {
       background: rgba(3, 7, 18, 0.8);
       backdrop-filter: blur(16px);
@@ -81,7 +81,7 @@
 
     .hero p { color: var(--text-muted); font-size: 1.15rem; margin-bottom: 30px; }
 
-    /* Glass Search Box */
+    /* Search Box */
     .search-box { max-width: 520px; margin: 0 auto 25px; }
 
     .search-box input {
@@ -229,7 +229,7 @@
       color: var(--text-muted);
     }
 
-    /* Footer Buttons (Bottom Placement) */
+    /* Footer Section */
     footer {
       margin-top: auto;
       border-top: 1px solid var(--card-border);
@@ -282,88 +282,7 @@
 </head>
 <body>
 
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>অপ্রকাশিত — গল্পের এক অন্য দুনিয়া</title>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- CSS লিংক (ক্যাশ এড়াতে ?v=2.0 যুক্ত করা হয়েছে) -->
-  <link rel="stylesheet" href="style.css?v=2.0">
-</head>
-<body>
-
-  <canvas id="bgCanvas"></canvas>
-
-  <nav class="navbar">
-    <div class="container">
-      <a href="index.html" class="logo">অপ্রকাশিত.</a>
-    </div>
-  </nav>
-
-  <div class="container">
-    <header class="hero">
-      <h1>অপ্রকাশিত অনুভূতির গল্পমালা</h1>
-      <p>শব্দে সাজানো হাজারো অনুভূতির আত্মপ্রকাশ</p>
-      
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="গল্পের নাম বা লেখক দিয়ে খুঁজুন...">
-      </div>
-
-      <div class="categories" id="categoryFilter">
-        <button class="cat-btn active" data-category="সব">সব গল্প</button>
-        <button class="cat-btn" data-category="রোমান্টিক">রোমান্টিক</button>
-        <button class="cat-btn" data-category="থ্রিলার">থ্রিলার</button>
-        <button class="cat-btn" data-category="হরর">হরর</button>
-        <button class="cat-btn" data-category="জীবনমুখী">জীবনমুখী</button>
-        <button class="cat-btn" data-category="অন্যান্য">অন্যান্য</button>
-      </div>
-    </header>
-
-    <main>
-      <div class="stories-grid" id="storiesGrid">
-        <p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">গল্প লোড হচ্ছে...</p>
-      </div>
-    </main>
-  </div>
-
-  <div class="modal" id="aboutModal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal('aboutModal')">&times;</span>
-      <h2 style="margin-bottom:15px; color:var(--accent-color);">আমাদের সম্পর্কে</h2>
-      <p style="color:var(--text-muted); margin-bottom: 15px;">
-        'অপ্রকাশিত' হলো সাহিত্যপ্রেমীদের জন্য তৈরি একটি বিশেষ ডিজিটাল প্ল্যাটফর্ম। এখানে পাঠকরা তাদের মনের না-বলা কথা, অনুভূতি ও বৈচিত্র্যময় গল্প উপভোগ করতে পারেন।
-      </p>
-      <div style="background: rgba(56, 189, 248, 0.1); padding: 15px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.2);">
-        <p style="color:var(--text-main); font-size: 0.95rem;">
-          ✍️ <strong>আপনিও কি গল্প লিখতে চান?</strong><br>
-          আপনার কোনো গল্প পাঠাতে চাইলে নিচের <strong>"যোগাযোগ"</strong> বাটনে ক্লিক করে আমাদের ফেসবুক পেজে মেসেজ দিন। আমরা আপনার নামসহ গল্পটি ওয়েবসাইটে আপডেট করে দেবো!
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <div class="container footer-content">
-      <div class="footer-buttons">
-        <button class="footer-btn" onclick="openModal('aboutModal')">ℹ️ আমাদের সম্পর্কে</button>
-        <a href="https://www.facebook.com/share/1EESsM3gDj/" target="_blank" class="footer-btn">💬 যোগাযোগ (গল্প পাঠান)</a>
-      </div>
-      <p class="footer-text">&copy; 2026 অপ্রকাশিত। সর্বস্বত্ব সংরক্ষিত।</p>
-    </div>
-  </footer>
-
-  <!-- Firebase & Custom Script Link -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="script.js?v=2.0"></script>
-</body>
-</html>
-
-
-  <!-- Dynamic Cyber Canvas Background -->
+  <!-- Background Particle Canvas -->
   <canvas id="bgCanvas"></canvas>
 
   <!-- Navbar -->
@@ -431,7 +350,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <script>
-    /* Animated Cyber Particle Canvas */
+    /* Animated Cyber Canvas */
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
