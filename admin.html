@@ -8,12 +8,12 @@
   
   <style>
     :root {
-      --bg-dark: #07090e;
-      --card-bg: rgba(18, 24, 38, 0.85);
-      --card-border: rgba(88, 166, 255, 0.15);
-      --text-main: #f0f6fc;
-      --text-muted: #8b949e;
-      --accent-color: #58a6ff;
+      --bg-dark: #05070a;
+      --card-bg: rgba(15, 23, 42, 0.85);
+      --card-border: rgba(56, 189, 248, 0.2);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-color: #38bdf8;
       --danger-color: #f85149;
     }
 
@@ -23,19 +23,44 @@
       font-family: 'Hind Siliguri', sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-main);
-      padding: 40px 20px;
+      padding: 30px 20px;
       min-height: 100vh;
     }
 
-    .container { max-width: 800px; margin: 0 auto; }
+    .container { max-width: 850px; margin: 0 auto; }
+
+    /* Top Quick Access Buttons */
+    .admin-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 10px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-color);
+      color: #000;
+    }
 
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 30px;
       margin-bottom: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     h2 { color: var(--accent-color); margin-bottom: 20px; }
@@ -62,13 +87,19 @@
       display: flex; justify-content: space-between; align-items: center;
     }
 
-    .btn-edit { background: rgba(88, 166, 255, 0.2); color: var(--accent-color); padding: 6px 12px; font-size: 0.85rem;}
-    .btn-delete { background: rgba(248, 81, 73, 0.2); color: var(--danger-color); padding: 6px 12px; font-size: 0.85rem;}
+    .btn-edit { background: rgba(56, 189, 248, 0.2); color: var(--accent-color); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem;}
+    .btn-delete { background: rgba(248, 81, 73, 0.2); color: var(--danger-color); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem;}
   </style>
 </head>
 <body>
 
   <div class="container">
+    <!-- Admin Quick Nav Bar -->
+    <div class="admin-nav">
+      <a href="index.html" class="nav-btn">🏠 মূল ওয়েবসাইট দেখুন</a>
+      <a href="https://www.facebook.com/share/1EESsM3gDj/" target="_blank" class="nav-btn">✉️ গল্প জমা রিকুয়েস্ট (ফেসবুক পেজ)</a>
+    </div>
+
     <div class="card" id="loginBox">
       <h2>🔐 এডমিন লগইন</h2>
       <div class="form-group">
@@ -79,7 +110,7 @@
     </div>
 
     <div class="card" id="adminBox" style="display:none;">
-      <h2 id="formTitle">✍️ পোস্ট বা এডিট করুন</h2>
+      <h2 id="formTitle">✍️ গল্প পোস্ট বা এডিট করুন</h2>
       <form id="storyForm">
         <input type="hidden" id="editStoryId">
         <div class="form-group">
@@ -108,7 +139,7 @@
         <button type="button" class="btn-cancel" id="cancelBtn" onclick="resetForm()">বাতিল</button>
       </form>
 
-      <h2 style="margin-top:35px;">📚 সকল পোস্ট এডমিন কন্ট্রোল</h2>
+      <h2 style="margin-top:35px;">📚 প্রকাশিত গল্প ম্যানেজমেন্ট</h2>
       <div id="adminStoriesList"></div>
     </div>
   </div>
